@@ -1,0 +1,51 @@
+/*************************************************************************
+* Copyright MikroElektronika © 2020
+*
+*************************************************************************
+*
+* @description
+* General financial table styling
+* 
+* @author
+* Marko Jovanovic
+*
+*************************************************************************/
+
+table.records{  border: none; }
+table.records thead tr th, table.records tbody tr td, table.records tfoot tr td{  border: 1px solid #ddd; }
+table.records tr.nowrap td, table.records tr.nowrap th{ white-space: nowrap; }
+table.records tr td.wrap, table.records tr th.wrap{ white-space: normal; }
+table.records tr td{  background-color: #fff; }
+table.records tr td ul, table.records tr td ol{  margin:0 0 0 20px; }
+table.records tr td abbr{  cursor: help; }
+table.records tr.column_numbers th, table.records tr.column_numbers td{  background-color: #f2f2f2; }
+table.records tr td.title{  background-color: #f2f2f2; }
+table.records tr td.section{  background-color: #e8f5ff; }
+table.records tr.noBorder td { border: 0; }
+table.records thead tr.noTopBorder th, table.records tbody tr.noTopBorder td { border-top: 0; }
+table.records thead tr.noBottomBorder th, table.records tbody tr.noBottomBorder td { border-bottom: 0; }
+table tr.sums td ,tr.sums th{ background-color: #ffffb3; }
+table tr.passed td{ background-color: #ccffcc; }
+table tr.error td{ background-color: pink; }
+table tr td.difference{ color: #f97272; }
+table tr.canceled td{ color: #b4b4b4; }
+table tr.pagination td, table tr.pagination th{ background-color: #edf3ff; }
+
+table tr.deleted td{ color: #dfdfdf; }
+table tr.advance td{ background-color: #edf3ff; }
+table tr td.operation{ width:30px; }
+
+table tr th.payments { background-color: #ccffcc; }
+table tr th.advance { background-color: #edf3ff; }
+table tr th.invoice { background-color: #00ff00; }
+table tr th.for_advance { background-color: #ffe2c5; }
+table tr th.not { background-color: pink; }
+table tr.warning td { background-color: rgb(255, 226, 231); color: salmon; }
+
+table tr td.info { background-color: #fff9cc; color: blue; font-style: italic; }
+p.info { padding:10px; background-color: #fff9cc; color: blue; font-style: italic; }
+.bigdrop { width: 600px !important; }
+
+.file-upload { width: 100%; border: 1px solid #ccc; background: #eee; position: relative; }
+.file-upload-add-file { position: absolute; top: 45px; left: 15px; width: 200px; border-radius: 0px; }
+.file-upload-filename { position: absolute; width: 97%; top: 85px; left: 15px; border: 1px solid #aaa; padding: 10px; background: #fff; }

@@ -1,0 +1,42 @@
+version: '3.4'
+
+services:
+
+  erp-php-apache:
+    container_name: erp-php-apache
+    image: 'mikroe/php-apache'
+    ports:
+      - '80:80'
+    volumes:
+      - './.docker/apache2/logs:/var/log/apache2'
+      - './.docker/apache2/sites-enabled:/etc/apache2/sites-enabled'
+      - './.docker/apache2/conf-enabled:/etc/apache2/conf-enabled'
+      - './.docker/php/php.ini:/usr/local/etc/php/php.ini'
+      - './cake:/var/www/html'
+    restart: unless-stopped
+    depends_on:
+      - erp-mysql
+      - erp-mailcatcher
+
+  erp-mysql:
+    container_name: erp-mysql
+    image: 'mysql:5.6'
+    command: "--innodb_use_native_aio=0 --query_cache_size=0 --query_cache_type=0 --query_cache_limit=5M --innodb_buffer_pool_size=1600M --innodb_log_file_size=200M --innodb_buffer_pool_instances=1 --tmp_table_size=20M --max_heap_table_size=20M --transaction_isolation=READ-COMMITTED"
+    volumes:
+      - './.docker/mysql/data:/var/lib/mysql'
+      - './:/var/www/html'
+    restart: unless-stopped
+    ports:
+      - '3306:3306'
+    environment:
+      MYSQL_ROOT_PASSWORD: neZnamSt4seShavad3779
+      MYSQL_DATABASE: dbERP
+      MYSQL_USER: dbERP
+      MYSQL_PASSWORD: dbERP
+
+  erp-mailcatcher:
+    container_name: erp-mailcatcher
+    image: 'mikroe/mailcatcher'
+    ports:
+      - '1080:1080'
+    restart: unless-stopped

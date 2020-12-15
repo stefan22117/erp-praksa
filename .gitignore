@@ -1,0 +1,4 @@
+# ignore all logs *.log 
+*.log
+# ignore mysql data
+.docker/mysql/data/*

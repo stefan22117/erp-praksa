@@ -1,0 +1,25 @@
+<IfModule mod_php5.c>
+  php_value engine off
+</IfModule>
+<IfModule mod_php4.c>
+  php_value engine off
+</IfModule>
+
+#Disable listing
+Options -Indexes
+
+#Allow only from certain addresses
+SetEnvIf Referer /QmsDocuments/uf_view internal
+SetEnvIf Referer /QmsDocuments/uf_save internal
+SetEnvIf Referer /QmsDocuments/uf_version internal
+SetEnvIf Referer /QmsDocumentVersions/view internal
+SetEnvIf Referer /MeetingTopics/save internal
+SetEnvIf Referer /MeetingTopicComments/save internal
+SetEnvIf Referer /MeetingTopics/view internal
+SetEnvIf Referer /HrTests/save internal
+SetEnvIf Referer /HrTests/view internal
+
+<Files ~ "\.(jpg|jpeg|png|bmp|gif)$">
+  Deny from all
+  Allow from env=internal
+</Files>

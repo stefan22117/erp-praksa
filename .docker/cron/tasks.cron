@@ -1,0 +1,34 @@
+* * * * * cat /etc/crontabs/tasks.cron >> /var/log/cron.log 2>&1
+*/5 * * * * cd /home/erplive/www/cake/app/ && Console/cake Queue.Queue runworker >> /var/log/cron.log 2>&1
+0 8 * * * cd /home/erplive/www/cake/app/ && Console/cake currency >> /var/log/cron.log 2>&1
+*/5 * * * * cd /home/erplive/www/cake/app/ && Console/cake fraud check >> /var/log/cron.log 2>&1
+*/5 * * * * cd /home/erplive/www/cake/app/ && Console/cake licence check >> /var/log/cron.log 2>&1
+*/15 * * * * cd /home/erplive/www/cake/app/ && Console/cake order ps_update >> /var/log/cron.log 2>&1
+00 17 * * * cd /home/erplive/www/cake/app/ && Console/cake order_mass_email >> /var/log/cron.log 2>&1
+00 18 * * * cd /home/erplive/www/cake/app/ && Console/cake order_email send >> /var/log/cron.log 2>&1
+*/30 * * * * cd /home/erplive/www/cake/app/ && Console/cake CrmConversation check >> /var/log/cron.log 2>&1
+0 5 * * * cd /home/erplive/www/cake/app/ && Console/cake dynamic_margin >> /var/log/cron.log 2>&1
+20 5 * * 1-5 cd /home/erplive/www/cake/app/ && Console/cake PoDocument deadlineItems >> /var/log/cron.log 2>&1
+30 5 * * 1-5 cd /home/erplive/www/cake/app/ && Console/cake PoDocument deadlineItemsInWeek >> /var/log/cron.log 2>&1
+30 5 * * 1-5 cd /home/erplive/www/cake/app/ && Console/cake PoDocument deadlineItemsInWeek 4 true >> /var/log/cron.log 2>&1
+30 5 * * 1-5 cd /home/erplive/www/cake/app/ && Console/cake PoDocument deadlineItemsInWeek 8 true >> /var/log/cron.log 2>&1
+#repromaterijal kome se slobodno stanje ne slaze sa Item.free_qty
+0 18 * * * cd /home/erplive/www/cake/app/ && Console/cake ItemCard checkFreeQty >> /var/log/cron.log 2>&1
+#komponente sa slobodnim stanjem nula, bitno je da se izvrsava pre dinamicke margine dynamic_margin
+55 4 * * 1-5 cd /home/erplive/www/cake/app/ && Console/cake PoDocument checkIfItemFreeQtyIsZero >> /var/log/cron.log 2>&1
+0 0 * * * cd /home/erplive/www/cake/app/ && Console/cake reminder process >> /var/log/cron.log 2>&1
+30 17 * * * cd /home/erplive/www/cake/app/ && Console/cake product_card productQtyCheck >> /var/log/cron.log 2>&1
+00 21 * * * cd /home/erplive/www/cake/app/ && Console/cake bank_statement check >> /var/log/cron.log 2>&1
+00 21 * * * cd /home/erplive/www/cake/app/ && Console/cake meeting checkUnpublished >> /var/log/cron.log 2>&1
+30 5 * * * cd /home/erplive/www/cake/app/ && Console/cake RvReservation checkReservationDateDue >> /var/log/cron.log 2>&1
+00 22 * * * cd /home/erplive/www/cake/app/ && Console/cake OrderForm automaticCancelRfq >> /var/log/cron.log 2>&1
+00 10 * * 1 cd /home/erplive/www/cake/app/ && Console/cake Bom bomReplacementItemsReminder >> /var/log/cron.log 2>&1
+0 */20 * * * cd /home/erplive/www/cake/app/ && Console/cake ItemSpecification refreshDigiKeyToken >> /var/log/cron.log 2>&1
+0 1 * * * cd /home/erplive/www/cake/app/ && Console/cake HrHolidayReport update >> /var/log/cron.log 2>&1
+0 3 * * * cd /home/erplive/www/cake/app/ && Console/cake ProcurementOrder refreshDashboard >> /var/log/cron.log 2>&1
+30 3 * * * cd /home/erplive/www/cake/app/ && Console/cake ProcurementOrder mailReport >> /var/log/cron.log 2>&1
+45 0 * * * cd /home/erplive/www/cake/app/ && Console/cake order send_tss_token_reminders >> /var/log/cron.log 2>&1
+#slanje obavestanja HR-u i nadredjenom o isteku probnog rada zaposlenog
+0 9 * * * cd /home/erplive/www/cake/app/ && Console/cake HrContractTrialExpired >> /var/log/cron.log 2>&1
+#slanje obavestenje da je istekao rok zadatog taska
+0 7 * * * cd /home/erplive/www/cake/app/ && Console/cake MmTaskTime passedDeadlineTasksNotices >> /var/log/cron.log 2>&1

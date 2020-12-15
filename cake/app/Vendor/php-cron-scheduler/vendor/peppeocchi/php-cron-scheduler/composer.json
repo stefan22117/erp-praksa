@@ -1,0 +1,23 @@
+{
+    "name": "peppeocchi/php-cron-scheduler",
+    "description": "PHP Cron Job Scheduler",
+    "license": "MIT",
+    "keywords": ["cron job", "scheduler"],
+    "authors": [
+        {
+            "name": "Giuseppe Occhipinti",
+            "email": "peppeocchi@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=5.4.0",
+        "mtdowling/cron-expression": "@stable",
+        "swiftmailer/swiftmailer": "@stable"
+    },
+    "autoload": {
+        "psr-0": {
+            "GO": "src/"
+        }
+    }
+}

@@ -1,0 +1,50 @@
+/* DivTable.com */
+
+/* Prilagodjeno za potrebe BI+ modula */
+
+.divTable{
+	display: table;
+	margin: auto;
+	margin-top: 30px;
+	width: 90%;
+}
+.divTableRow {
+	display: table-row;
+}
+.divTableHeading {
+	background-color: #EEE;
+	display: table-header-group;
+}
+.divTableCell, .divTableHead {
+	width: 20%;
+	border: 1px solid #999999;
+	display: table-cell;
+	padding: 3px 10px;
+	text-align: center;
+	vertical-align: middle;
+}
+.divTableCell2, .divTableHead2 {
+	width: 14%;
+	border: 1px solid #999999;
+	display: table-cell;
+	padding: 3px 10px;
+	text-align: center;
+	vertical-align: middle;
+}
+.divTableHeading {
+	background-color: #EEE;
+	display: table-header-group;
+	font-weight: bold;
+}
+.divTableFoot {
+	background-color: #EEE;
+	display: table-footer-group;
+	font-weight: bold;
+}
+.divTableBody {
+	display: table-row-group;
+}
+
+.clickableValue {
+	color: #0000EE;
+}

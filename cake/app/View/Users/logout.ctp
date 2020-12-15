@@ -1,0 +1,1 @@
+<?php echo $this->Html->link('Odjava', array('controller' => 'users', 'action' => 'logout'), array('class' => 'btn small blue')); ?>
