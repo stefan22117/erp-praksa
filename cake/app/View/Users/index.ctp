@@ -1,4 +1,5 @@
-<?php $this->Paginator->options(array(
+<?php 
+$this->Paginator->options(array(
 	'url' => array('action' => 'index'),
 	'update' => '#container', 
 	'evalScripts' => true,
