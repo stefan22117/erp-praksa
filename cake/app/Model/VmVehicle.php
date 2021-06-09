@@ -15,79 +15,159 @@ App::uses('AppModel', 'Model');
  * @property VmVehicleFile $VmVehicleFile
  * @property VmVehicleInternalWorker $VmVehicleInternalWorker
  */
-class VmVehicle extends AppModel {
+class VmVehicle extends AppModel
+{
 
-/**
- * Validation rules
- *
- * @var array
- */
+	/**
+	 * Validation rules
+	 *
+	 * @var array
+	 */
 	public $validate = array(
 		'brand_and_model' => array(
 			'notempty' => array(
 				'rule' => array('notempty'),
-				//'message' => 'Your custom message here',
-				//'allowEmpty' => false,
-				//'required' => false,
-				//'last' => false, // Stop validation after this rule
-				//'on' => 'create', // Limit validation to 'create' or 'update' operations
+				'message' => 'Niste uneli marku i model',
 			),
 		),
 		'reg_number' => array(
 			'notempty' => array(
 				'rule' => array('notempty'),
-				//'message' => 'Your custom message here',
-				//'allowEmpty' => false,
-				//'required' => false,
-				//'last' => false, // Stop validation after this rule
-				//'on' => 'create', // Limit validation to 'create' or 'update' operations
+				'message' => 'Niste uneli registarski broj',
 			),
+			'invalid_reg_number' => array(
+				'rule' =>  '/^([A-Z]|[a-z]){2}-\d{3,5}-([A-Z]|[a-z]){2}$/',
+				'message' => 'Registarski broj mora biti u formatu: AA-123(4)(5)-ZZ'
+			),
+			'unique' => array(
+				'rule' => 'unique',
+				'message' => 'Već postoji vozilo sa ovim registarskim brojem'
+			)
 		),
 		'in_use' => array(
-			'numeric' => array(
-				'rule' => array('numeric'),
-				//'message' => 'Your custom message here',
-				//'allowEmpty' => false,
-				//'required' => false,
-				//'last' => false, // Stop validation after this rule
-				//'on' => 'create', // Limit validation to 'create' or 'update' operations
-			),
+			//'numeric' => array(
+			//	'rule' => array('numeric'),
+			//'message' => 'Your custom message here',
+			// ),
 		),
 		'active_from' => array(
 			'date' => array(
 				'rule' => array('date'),
-				//'message' => 'Your custom message here',
-				//'allowEmpty' => false,
-				//'required' => false,
-				//'last' => false, // Stop validation after this rule
-				//'on' => 'create', // Limit validation to 'create' or 'update' operations
+				'message' => 'Izaberite od kad je vozilo aktivno',
+			),
+		),
+		'active_to' => array(
+			'date' => array(
+				'rule' => array('date'),
+				'message' => 'Izaberite do kad je vozilo aktivno',
+			),
+		),
+		'horse_power' => array(
+			'notempty' => array(
+				'rule' => array('notempty'),
+				'message' => 'Niste uneli konjske snage'
+			),
+			'numeric' => array(
+				'rule' => array('numeric'),
+				'message' => 'Niste pravilno uneli konjske snage'
+			),
+		),
+		'engine_capacity_cm3' => array(
+			'notempty' => array(
+				'rule' => array('notempty'),
+				'message' => 'Niste uneli kubikažu'
+			),
+			'numeric' => array(
+				'rule' => array('numeric'),
+			),
+		),
+		'year_of_production' => array(
+			'notempty' => array(
+				'rule' => array('notempty'),
+				'message' => 'Niste uneli godinu proizvodnje'
+			),
+			'numeric' => array(
+				'rule' => array('numeric'),
+				'message' => 'Niste pravilno uneli godinu proizvodnje'
+			),
+		),
+		'color' => array(
+			'notempty' => array(
+				'rule' => array('notempty'),
+				'message' => 'Niste uneli boju'
+			),
+		),
+		'number_of_seats' => array(
+			'notempty' => array(
+				'rule' => array('notempty'),
+				'message' => 'Niste uneli broj sedišta'
+			),
+			'numeric' => array(
+				'rule' => array('numeric'),
+				'message' => 'Niste pravilno uneli broj sedišta'
+			),
+		),
+		'chassis_number' => array(
+			'notempty' => array(
+				'rule' => array('notempty'),
+				'message' => 'Niste uneli broj šasije',
+			),
+			'invalid_chassis_number' => array(
+				'rule' => '/^.{17}$/',
+				'message' => 'Broj šasije mora imati 17 cifara i brojeva'
+			)
+		),
+		'engine_number' => array(
+			'notempty' => array(
+				'rule' => array('notempty'),
+				'message' => 'Niste uneli broj motora',
+			),
+			'invalid_engine_number' => array(
+				'rule' => '/^.{10}$/',
+				'message' => 'Broj motora mora imati 10 cifara i brojeva'
+			)
+		),
+		'date_of_purchase' => array(
+			'date' => array(
+				'rule' => array('date'),
+				'message' => 'Izaberite datum kupovine vozila'
+			),
+		),
+		'price' => array(
+			'notempty' => array(
+				'rule' => array('notempty'),
+				'message' => 'Niste uneli cenu'
+			),
+			'numeric' => array(
+				'rule' => array('numeric'),
+				'message' => 'Niste pravilno uneli cenu'
 			),
 		),
 	);
 
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
 
-/**
- * hasMany associations
- *
- * @var array
- */
-public $hasAndBelongsToMany = array(
-	'VmExternalWorker' => array(
-		'className' => 'VmExternalWorker',
-		'foreignKey' => 'vm_vehicle_id',
-		'joinTable'=> 'vm_external_worker_vehicles',
-		'dependent' => false,
-		'conditions' => '',
-		'fields' => '',
-		'order' => '',
-		'limit' => '',
-		'offset' => '',
-		'exclusive' => '',
-		'finderQuery' => '',
-		'counterQuery' => ''
-	),
-);
+	/**
+	 * hasMany associations
+	 *
+	 * @var array
+	 */
+	public $hasAndBelongsToMany = array(
+		'VmExternalWorker' => array(
+			'className' => 'VmExternalWorker',
+			'foreignKey' => 'vm_vehicle_id',
+			'joinTable' => 'vm_external_worker_vehicles',
+			'dependent' => false,
+			'conditions' => '',
+			'fields' => '',
+			'order' => '',
+			'limit' => '',
+			'offset' => '',
+			'exclusive' => '',
+			'finderQuery' => '',
+			'counterQuery' => ''
+		),
+	);
 	public $hasMany = array(
 		'VmChangeLog' => array(
 			'className' => 'VmChangeLog',
@@ -141,7 +221,7 @@ public $hasAndBelongsToMany = array(
 			'finderQuery' => '',
 			'counterQuery' => ''
 		),*/
-		
+
 
 		'VmFuel' => array(
 			'className' => 'VmFuel',
@@ -237,5 +317,4 @@ public $hasAndBelongsToMany = array(
 			'counterQuery' => ''
 		),
 	);
-
 }

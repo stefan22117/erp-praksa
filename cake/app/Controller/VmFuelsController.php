@@ -47,17 +47,12 @@ class VmFuelsController  extends AppController
 
             if($vm_crossed_km = $this->VmCrossedKm->save($vm_crossed_km)){
 
-                /*$vm_crossed_km_id = $this->VmCrossedKm->find('first',[
-                    'fields'=> ['MAX(VmCrossedKm.id) as id']
-                ])[0]['id'];*/
-        
                 $vm_fuel = [
                     'VmFuel'=>[
                         'liters'=>$this->request->data['VmFuel']['liters'],
                         'amount'=>$this->request->data['VmFuel']['amount'],
                         'vm_vehicle_id'=> $vehicle_id,
                         'vm_crossed_km_id'=>$vm_crossed_km['VmCrossedKm']['id']
-                        //ovde mi sacuvava 0 a spolja pise lepo id
                     ]
                     ];
                     if($this->VmFuel->save($vm_fuel)){
