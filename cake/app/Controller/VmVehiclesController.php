@@ -8,22 +8,32 @@ class VmVehiclesController  extends AppController
 	public function beforeFilter()
 	{
 		$this->Auth->allow('index', 'add', 'view', 'edit', 'delete', 'save');
-		$colors = [
-			'red',
-			'green',
-			'blue',
-			'black',
-			'white',
-			'yellow',
-			'brown',
-			'orange',
-		];
-		$this->set('colors', $colors);
+
+		if (
+			strtolower($this->request['action']) == 'view' ||
+			strtolower($this->request['action']) == 'save'
+		) {
+			$vm_vehicle_id = !empty($this->request['pass']) ? $this->request['pass'][0] : 0;
+
+			if ($vm_vehicle_id) {
+				$vm_vehicle = $this->VmVehicle->findById($vm_vehicle_id);
+				if (empty($vm_vehicle)) {
+					$this->Session->setFlash(__('Traženo vozilo nije pronađeno'), 'flash_error');
+					return $this->redirect(array('controller' => 'vmVehicles', 'action' => 'index'));
+				}
+			}
+			else if(strtolower($this->request['action']) != 'save')
+			{
+				$this->Session->setFlash(__('Niste prosledili id vozila'), 'flash_error');
+				return $this->redirect(array('controller' => 'vmVehicles', 'action' => 'index'));
+			}
+
+		}
 	}
 
 	var $name = 'VmVehicles';
-	public $components = ['Paginator'];
-	public $uses = [
+	public $components = array('Paginator');
+	public $uses = array(
 		'VmVehicle',
 		'VmRegistration',
 		'VmChangeLog',
@@ -32,21 +42,19 @@ class VmVehiclesController  extends AppController
 		'VmRepair',
 		'VmMaintenance',
 		'VmDamage',
-
-		'HrWorker'
-	];
+		'VmVehicleFile',
+		'HrWorker',
+		'VmExternalWorker',
+		'VmExternalWorkerVehicle',
+		'VmInternalWorkerVehicle',
+		'VmCompany'
+	);
 
 
 
 	public function index()
 	{
 		$this->set('title_for_layout', __('Vozila - MikroERP'));
-
-		// $hr_workers = array_map(function ($hr_worker) {
-		// 	return $hr_worker['HrWorker']['id'] = $hr_worker['HrWorker']['first_name'];
-		// }, $this->HrWorker->find('all'));
-		// $this->set('hr_workers', $hr_workers);
-
 
 		$this->set('hr_workers', $this->HrWorker->find('list', array(
 			'fields' => array('HrWorker.id', 'HrWorker.first_name')
@@ -105,7 +113,7 @@ class VmVehiclesController  extends AppController
 		if (isset($this->request->query['registered'])) {
 			$registered = $this->request->query['registered'];
 
-			
+
 			$joins[] = array(
 				'table' => 'vm_registrations',
 				'alias' => 'VmRegistration',
@@ -115,7 +123,7 @@ class VmVehiclesController  extends AppController
 					'VmRegistration.expiration_date >=' => date('Y-m-d')
 				)
 			);
-			
+
 			$this->request->data['VmVehicle']['registered'] = $registered;
 		}
 
@@ -128,7 +136,7 @@ class VmVehiclesController  extends AppController
 			'order' => 'VmVehicle.created DESC',
 			'recursive' => 2,
 			'limit' => 5,
-			'fields'=>'DISTINCT VmVehicle.*'
+			'fields' => 'DISTINCT VmVehicle.*'
 
 		);
 
@@ -140,27 +148,126 @@ class VmVehiclesController  extends AppController
 
 	public function save($vm_vehicle_id = null)
 	{
-		
 
 		if ($vm_vehicle_id == null) {
-		$this->set('action', 'add');
-		$success = __('Uspešno ste dodali vozilo');
-		$this->VmVehicle->create();
-	} else {
-		$this->set('action', 'edit');
-		$success = __('Uspešno ste izmenili vozilo');
+			$this->set('action', 'add');
+			$success = __('Uspešno ste dodali vozilo');
+			$this->VmVehicle->create();
+		} else {
+			$this->set('action', 'edit');
+			$success = __('Uspešno ste izmenili vozilo');
 			$this->VmVehicle->id = $vm_vehicle_id;
+
+			$vm_vehicle = $this->VmVehicle->findById($vm_vehicle_id);
+			$this->set('vm_vehicle', $vm_vehicle);
+
+
+			//hr workers
+			$vm_hr_worker_vehicles = $this->VmInternalWorkerVehicle->findAllByVmVehicleId(
+				$vm_vehicle_id,
+				array('fields' => 'VmInternalWorkerVehicle.hr_worker_id')
+			);
+			$vm_hr_array = array();
+			foreach ($vm_hr_worker_vehicles as $vm_hr_worker_vehicle) {
+				$vm_hr_array[] = $vm_hr_worker_vehicle['VmInternalWorkerVehicle']['hr_worker_id'];
+			}
+			$this->set('vm_hr_array', $vm_hr_array);
+			//hr workers
+
+
+			//external workers
+			$vm_external_worker_vehicles = $this->VmExternalWorkerVehicle->findAllByVmVehicleId(
+				$vm_vehicle_id,
+				array('fields' => 'VmExternalWorkerVehicle.vm_external_worker_id')
+			);
+			$vm_ext_array = array();
+			foreach ($vm_external_worker_vehicles as $vm_external_worker_vehicle) {
+				$vm_ext_array[] = $vm_external_worker_vehicle['VmExternalWorkerVehicle']['vm_external_worker_id'];
+			}
+			$this->set('vm_ext_array', $vm_ext_array);
+			//external workers
+
+
 		}
-		
-		
+
+		$this->set('hr_workers', $this->HrWorker->find(
+			'list',
+			array(
+				'fields' => array('HrWorker.id', 'HrWorker.first_name')
+			)
+		));
+
+
+
+		$this->set('vm_external_workers', $this->VmExternalWorker->find(
+			'list',
+			array(
+				'fields' => array('VmExternalWorker.id', 'VmExternalWorker.first_name')
+			)
+		));
+
+
+
+
+
+
+
 		if ($this->request->is('post') || $this->request->is('put')) {
 
 
-
-
-
+			$this->request->data['VmVehicle']['hr_worker_id'] =
+				$this->request->data['VmInternalWorkerVehicle']['hr_worker_id'];
+			$this->request->data['VmVehicle']['vm_external_worker_id'] =
+				$this->request->data['VmExternalWorkerVehicle']['vm_external_worker_id'];
 			$this->request->data['VmVehicle']['reg_number'] = strtoupper($this->request->data['VmVehicle']['reg_number']);
-			if ($this->VmVehicle->save($this->request->data)) {
+			if ($vm_vehicle = $this->VmVehicle->save($this->request->data)) {
+
+
+				//niz
+
+
+
+
+				$this->VmInternalWorkerVehicle->deleteAll(array('vm_vehicle_id' => $vm_vehicle['VmVehicle']['id']));
+				if (!empty($this->request->data['VmInternalWorkerVehicle']['hr_worker_id'])) {
+					foreach ($this->request->data['VmInternalWorkerVehicle']['hr_worker_id'] as $hr_id) {
+						$hr_worker_vehicle = array(
+							'VmInternalWorkerVehicle' =>
+							array(
+								'hr_worker_id' => $hr_id,
+								'vm_vehicle_id' => $vm_vehicle['VmVehicle']['id']
+							)
+						);
+						$this->VmInternalWorkerVehicle->create();
+						$this->VmInternalWorkerVehicle->save($hr_worker_vehicle);
+					}
+				}
+
+				$this->VmExternalWorkerVehicle->deleteAll(array('vm_vehicle_id' => $vm_vehicle['VmVehicle']['id']));
+				if (!empty($this->request->data['VmExternalWorkerVehicle']['vm_external_worker_id'])) {
+					foreach ($this->request->data['VmExternalWorkerVehicle']['vm_external_worker_id'] as $ext_id) {
+						$vm_external_worker_vehicle = array(
+							'VmExternalWorkerVehicle' =>
+							array(
+								'vm_external_worker_id' => $ext_id,
+								'vm_vehicle_id' => $vm_vehicle['VmVehicle']['id']
+							)
+						);
+						$this->VmExternalWorkerVehicle->create();
+						$this->VmExternalWorkerVehicle->save($vm_external_worker_vehicle);
+					}
+				}
+
+
+
+
+				//niz
+
+
+
+
+
+
 
 				$this->Session->setFlash($success, 'flash_success');
 				return $this->redirect(array('action' => 'index'));
@@ -184,17 +291,148 @@ class VmVehiclesController  extends AppController
 	public function view($vm_vehicle_id = null)
 	{
 
+		$errors = array();
+		//getting errors start
+		if ($this->Session->read('errors')) {
+			$this->request->data = $this->Session->read('errors.data');
+		}
+		if ($this->Session->read('errors.VmRegistration')) {
+			$errors['Registrations'] = true;
+			$this->VmRegistration->validationErrors = $this->Session->read('errors.VmRegistration');
+		}
+		if ($this->Session->read('errors.VmVehicleFile')) {
+			$errors['Files'] = true;
+			$this->VmVehicleFile->validationErrors = $this->Session->read('errors.VmVehicleFile');
+		}
 
 
+		if ($this->Session->read('errors.VmFuel')) {
+			$errors['Fuels'] = true;
+			$this->VmFuel->validationErrors = $this->Session->read('errors.VmFuel');
+			$this->VmCrossedKm->validationErrors = $this->Session->read('errors.VmFuelVmCrossedKm');
+		}
+
+		if ($this->Session->read('errors.VmDamage')) {
+			$errors['Damages'] = true;
+			$this->VmDamage->validationErrors = $this->Session->read('errors.VmDamage');
+		}
+		if ($this->Session->read('errors.VmRepair')) {
+			$errors['Repairs'] = true;
+			$this->VmRepair->validationErrors = $this->Session->read('errors.VmRepair');
+			$this->VmCrossedKm->validationErrors = $this->Session->read('errors.VmRepairVmCrossedKm');
+		}
+		if ($this->Session->read('errors.VmMaintenance')) {
+			$errors['Maintenances'] = true;
+			$this->VmMaintenance->validationErrors = $this->Session->read('errors.VmMaintenance');
+			$this->VmCrossedKm->validationErrors = $this->Session->read('errors.VmMaintenanceVmCrossedKm');
+		}
+
+
+
+
+		$this->set('errors', $errors);
+		$this->Session->delete('errors');
+
+
+		//getting errors end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		//vehicle
 		$vm_vehicle = $this->VmVehicle->find('first', array(
 			'conditions' => array('VmVehicle.id = ' => $vm_vehicle_id),
 			'recursive' => 2
 		));
+		$this->set('vm_vehicle', $vm_vehicle);
 
-		$vm_crossed_kms = $this->VmCrossedKm->find('all', array(
-			'conditions' => array('VmCrossedKm.vm_vehicle_id = ' => $vm_vehicle_id),
+
+		//registrations
+		$vm_registrations = $this->VmRegistration->find('all', array(
+			'conditions' => array('VmRegistration.vm_vehicle_id = ' => $vm_vehicle_id),
 			'recursive' => 2
 		));
+		$this->set('vm_registrations', $vm_registrations);
+
+
+		//vehicle files
+		$vm_vehicle_files = $this->VmVehicleFile->find('all', array(
+			'conditions' => array('VmVehicleFile.vm_vehicle_id = ' => $vm_vehicle_id),
+			'recursive' => 2
+		));
+		$this->set('vm_vehicle_files', $vm_vehicle_files);
+
+		//fuels
+		$vm_fuels = $this->VmFuel->find('all', array(
+			'conditions' => array('VmFuel.vm_vehicle_id = ' => $vm_vehicle_id),
+			'recursive' => 2
+		));
+		$this->set('vm_fuels', $vm_fuels);
+
+		//damages
+		$vm_damages = $this->VmDamage->find('all', array(
+			'conditions' => array('VmDamage.vm_vehicle_id = ' => $vm_vehicle_id),
+			'recursive' => 2
+		));
+		$this->set('vm_damages', $vm_damages);
+
+		//repairs
+		$vm_repairs = $this->VmRepair->find('all', array(
+			'recursive' => 2
+		));
+
+		$temp = [];
+		foreach ($vm_repairs as $vm_repair) {
+			if ($vm_repair['VmDamage']['vm_vehicle_id'] == $vm_vehicle_id) {
+				$temp[] = $vm_repair;
+			}
+		}
+		$vm_repairs = $temp;
+		$this->set('vm_repairs', $vm_repairs);
+
+		$vm_damages_for_repairs = $this->VmDamage->find('list', array(
+			'conditions' => array('VmDamage.vm_vehicle_id = ' => $vm_vehicle_id),
+			'fields' => array('VmDamage.id', 'VmDamage.description')
+		));
+		$this->set('vm_damages_for_repairs', $vm_damages_for_repairs);
+
+
+		//maintenances
+		$vm_maintenances = $this->VmMaintenance->find('all', array(
+			'conditions' => array('VmMaintenance.vm_vehicle_id = ' => $vm_vehicle_id),
+			'recursive' => 2
+		));
+		$this->set('vm_maintenances', $vm_maintenances);
+
+
+
 
 		$vm_max_crossed_km = $this->VmCrossedKm->findAllByVmVehicleId(
 			$vm_vehicle_id,
@@ -209,7 +447,7 @@ class VmVehiclesController  extends AppController
 		} else {
 			$vm_max_crossed_km = 0;
 		}
-
+		$this->set('vm_max_crossed_km', $vm_max_crossed_km);
 
 		$vm_max_registration_date = $this->VmRegistration->findAllByVmVehicleId(
 			$vm_vehicle_id,
@@ -228,55 +466,17 @@ class VmVehiclesController  extends AppController
 		} else {
 			$vm_max_registration_date = __('Nije registrovan');
 		}
-
-
-
-
-
-
-
 		$this->set('vm_max_registration_date', $vm_max_registration_date);
-		$this->set('vm_max_crossed_km', $vm_max_crossed_km);
 
+		$hr_workers = $this->HrWorker->find('list', array(
+			'fields' => array('HrWorker.id', 'HrWorker.first_name')
+		));
+		$this->set('hr_workers', $hr_workers);
 
-		$this->set('vm_crossed_kms', $vm_crossed_kms);
-		$this->set('vm_vehicle', $vm_vehicle);
-		return;
-
-
-		$kms = $this->VmCrossedKm->findAllByVmVehicleId($vm_vehicle_id);
-		$vm_damages = $this->VmDamage->findAllByVmVehicleId($vm_vehicle_id);
-		$fuels = $this->VmFuel->findByVmVehicleId($vm_vehicle_id);
-
-
-
-
-
-		$vm_repairs_ids = [];
-		foreach ($vm_damages as $vm_damage) {
-			if (isset($vm_damage['VmRepair']) && count($vm_damage['VmRepair'])) {
-				foreach ($vm_damage['VmRepair'] as $vm_repair) {
-					$vm_repairs_ids[] = $vm_repair['id'];
-				}
-			}
-		}
-
-		$vm_repairs = $this->VmRepair->find('all', ['conditions' => ['VmRepair.id' => $vm_repairs_ids]]);
-
-		$vm_maintenances = $this->VmMaintenance->findAllByVmVehicleId($vm_vehicle_id);
-
-
-
-
-		$this->set('vm_damages', $vm_damages);
-
-
-		$this->set('vm_repairs', $vm_repairs);
-
-
-		$this->set('vm_maintenances', $vm_maintenances);
-		$this->set('kms', $kms);
-		$this->set('fuels', $fuels);
+		$vm_companies = $this->VmCompany->find('list', array(
+			'fields' => array('VmCompany.id', 'VmCompany.name')
+		));
+		$this->set('vm_companies', $vm_companies);
 	}
 
 	public function add()
@@ -315,20 +515,15 @@ class VmVehiclesController  extends AppController
 			$this->request->data['VmVehicle']['active_to'] = $this->data['VmVehicle']['active_to']['year'] . '-' .
 				$this->data['VmVehicle']['active_to']['month'] . '-' . $this->data['VmVehicle']['active_to']['day'];
 
-			//bio je neki problem sa active_from, da li na frontendu da imam hidden polje koje generise 
-			//dddd-dd-dd? onda ove 4 linije nisu potrebne
 
-			//KAZE DA JE DOSLO DO GRESKE???
+
 			if ($this->VmVehicle->save($this->request->data)) {
 				$this->Session->setFlash('Uspesno ste sacuvali vozilo', 'flash_success');
+				return $this->redirect(array('action' => 'index'));
 			} else {
-
 				$this->Session->setFlash('Doslo je do greske!', 'flash_error');
+				return $this->redirect($this->referer());
 			}
-
-			// return $this->redirect(['action'=>'index']);
-
-
 		}
 
 

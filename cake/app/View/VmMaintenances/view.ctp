@@ -1,1 +1,5 @@
-view
+<?php
+
+echo $da;
+
+?>

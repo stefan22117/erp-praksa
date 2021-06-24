@@ -44,12 +44,7 @@ class VmVehicle extends AppModel
 				'message' => 'Već postoji vozilo sa ovim registarskim brojem'
 			)
 		),
-		'in_use' => array(
-			//'numeric' => array(
-			//	'rule' => array('numeric'),
-			//'message' => 'Your custom message here',
-			// ),
-		),
+		'in_use' => array(),
 		'active_from' => array(
 			'date' => array(
 				'rule' => array('date'),
@@ -57,24 +52,34 @@ class VmVehicle extends AppModel
 			),
 		),
 		'active_to' => array(
-			'date' => array(
-				'rule' => array('date'),
-				'message' => 'Izaberite do kad je vozilo aktivno',
+
+
+			'date' =>
+			array(
+				'rule' => 'date',
+				'message' => 'Niste pravilno uneli datum',
+				'allowEmpty' => true,
+				
 			),
+			'from_to' => array(
+				'rule' => 'from_to_custom',
+				'message' => 'Datum do ne moze biti veci od datuma od',
+				'allowEmpty' => true
+			)
 		),
 		'horse_power' => array(
 			'notempty' => array(
 				'rule' => array('notempty'),
 				'message' => 'Niste uneli konjske snage'
 			),
-			'numeric' => array(
-				'rule' => array('numeric'),
+			'naturalNumber' => array(
+				'rule' => array('naturalNumber'),
 				'message' => 'Niste pravilno uneli konjske snage'
 			),
 		),
 		'engine_capacity_cm3' => array(
-			'notempty' => array(
-				'rule' => array('notempty'),
+			'naturalNumber' => array(
+				'rule' => array('naturalNumber'),
 				'message' => 'Niste uneli kubikažu'
 			),
 			'numeric' => array(
@@ -82,14 +87,11 @@ class VmVehicle extends AppModel
 			),
 		),
 		'year_of_production' => array(
-			'notempty' => array(
-				'rule' => array('notempty'),
+			'naturalNumber' => array(
+				'rule' => array('naturalNumber'),
 				'message' => 'Niste uneli godinu proizvodnje'
 			),
-			'numeric' => array(
-				'rule' => array('numeric'),
-				'message' => 'Niste pravilno uneli godinu proizvodnje'
-			),
+			
 		),
 		'color' => array(
 			'notempty' => array(
@@ -102,8 +104,8 @@ class VmVehicle extends AppModel
 				'rule' => array('notempty'),
 				'message' => 'Niste uneli broj sedišta'
 			),
-			'numeric' => array(
-				'rule' => array('numeric'),
+			'naturalNumber' => array(
+				'rule' => array('naturalNumber'),
 				'message' => 'Niste pravilno uneli broj sedišta'
 			),
 		),
@@ -143,7 +145,38 @@ class VmVehicle extends AppModel
 				'message' => 'Niste pravilno uneli cenu'
 			),
 		),
+		'hr_worker_id'=> array(
+			'noSelected' => array(
+				'rule'=> 'multi_custom',
+				'message'=>'Izaberite radnika koji koristi ovo vozilo ili...'
+			)
+		),
+		'vm_external_worker_id'=> array(
+			'noSelected' => array(
+				'rule'=> 'multi_custom',
+				'message'=>'...eksternog radnika'
+			)
+		),
 	);
+
+	public function multi_custom($a, $b){
+		if(empty($this->data['VmInternalWorkerVehicle']['hr_worker_id']) && empty($this->data['VmExternalWorkerVehicle']['vm_external_worker_id'])){
+			return false;
+		}
+		return true;
+	}
+
+
+	public function from_to_custom($data)
+	{
+		$actife_from = $this->data['VmVehicle']['active_from'];
+		$active_to = $this->data['VmVehicle']['active_to'];
+
+		if ($actife_from > $active_to) {
+			return false;
+		}
+		return true;
+	}
 
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
 

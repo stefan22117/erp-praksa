@@ -4,9 +4,10 @@ App::uses('AppModel', 'Model');
  * VmFuel Model
  *
  */
-class VmFuel extends AppModel {
-    public $belongsTo = array(
-        'VmVehicle' => array(
+class VmFuel extends AppModel
+{
+	public $belongsTo = array(
+		'VmVehicle' => array(
 			'className' => 'VmVehicle',
 			'foreignKey' => 'vm_vehicle_id',
 			'dependent' => false,
@@ -19,8 +20,8 @@ class VmFuel extends AppModel {
 			'finderQuery' => '',
 			'counterQuery' => ''
 		),
-        'VmCrossedKm'=>array(
-            'className' => 'VmCrossedKm',
+		'VmCrossedKm' => array(
+			'className' => 'VmCrossedKm',
 			'foreignKey' => 'vm_crossed_km_id',
 			'dependent' => false,
 			'conditions' => '',
@@ -31,7 +32,42 @@ class VmFuel extends AppModel {
 			'exclusive' => '',
 			'finderQuery' => '',
 			'counterQuery' => ''
-        )
+		)
+	);
 
-        );
+	public $validate = array(
+		'liters' => array(
+			'notempty' => array(
+				'rule' => array('notempty'),
+				'message' => 'Niste uneli litre'
+			),
+			'numeric' => array(
+				'rule' => array('numeric'),
+				'message' => 'Niste pravilno uneli litre'
+			)
+		),
+		'amount' => array(
+			'notempty' => array(
+				'rule' => array('notempty'),
+				'message' => 'Niste uneli ukupnu cenu goriva'
+			),
+			'numeric' => array(
+				'rule' => array('numeric'),
+				'message' => 'Niste pravilno uneli ukupnu cenu goriva'
+			)
+		),
+		'vm_vehicle_id' => array(
+			'naturalNumber' => array(
+				'rule' => array('naturalNumber'),
+				'message' => 'Niste izabrali vozilo'
+			)
+		),
+		'vm_crossed_km_id' => array(
+			'naturalNumber' => array(
+				'rule' => array('naturalNumber'),
+				'message' => 'Niste predjene kilometre'
+			)
+		),
+
+	);
 }

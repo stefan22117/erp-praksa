@@ -1,269 +1,208 @@
 <ul class="breadcrumbs">
-    <li><?= $this->Html->link('Home', array('controller' => 'pages', 'action' => 'display')); ?></li>
-    <li><?= $this->Html->link('Companies', array('controller' => 'vmcompanies', 'action' => 'index')); ?></li>
-    <li class="last"><a href="" onclick="return false">View</a></li>
+    <li><?php echo $this->Html->link(__('Početna'), array('controller' => 'pages', 'action' => 'display')); ?></li>
+    <li><?php echo $this->Html->link(__('Firme'), array('action' => 'index')); ?></li>
+    <li class="last"><a href="" onclick="return false"><?php echo __('Detalji'); ?></a></li>
 </ul>
+<div class="name_of_page">
+    <h3><i class="icon-building" style="color: green;"></i> <i class="icon-search"></i> <?php echo __('Detalji firme: ' . $vm_company['VmCompany']['name']); ?></h3>
 
-<h2><?= $vm_company['VmCompany']['name'] ?></h2>
+</div>
+
+<div style="float:right; margin:20px 24px 0 0;">
+    <ul class="button-bar">
+        <li class="first">
+            <?php
+            echo $this->Html->link(
+                '<i class="icon-edit" style="color:orange;"></i> ' . __('Izmena'),
+                array(
+                    'action' => 'save',
+                    $vm_company['VmCompany']['id']
+                ),
+                array(
+                    'escape' => false,
+                    'style' => ' font-size: 12px;'
+                )
+            );
+            ?>
+        </li>
+        <li class="last">
+            <?php
+            echo $this->Form->postLink(
+                '<i class="icon-trash" style="color:red;"></i> ' . __('Brisanje'),
+                array(
+                    'action' => 'delete',
+                    $vm_company['VmCompany']['id']
+                ),
+                array(
+                    'escape' => false,
+                    'confirm' =>  __('Da li ste sigurni da želite da izbrišete firmu ' . $vm_company['VmCompany']['name'] . '?'),
+                    'style' => ' font-size: 12px;'
+                )
+            );
+            ?>
+        </li>
+    </ul>
+</div>
 
 
-<table>
-    <tr>
-        <td>
-            <?= $vm_company['VmCompany']['name'] ?>
-        </td>
-        <td>
-            <?= $vm_company['VmCompany']['address'] ?>
-        </td>
-        <td>
-            <?= $vm_company['VmCompany']['city'] ?>
-        </td>
-        <td>
-            <?= $vm_company['VmCompany']['email'] ?>
-        </td>
-        <td>
-            <?= $vm_company['VmCompany']['zip_code'] ?>
-        </td>
-
-    </tr>
-</table>
 
 
+
+
+<div class="content_data">
+    <table cellspacing="0" cellpadding="0" class="striped">
+        <tr>
+            <th style="text-align:left"><?php echo __('Naziv firme'); ?></th>
+            <td style="width:85%;"><?php echo $vm_company['VmCompany']['name']; ?></td>
+        </tr>
+        <tr>
+            <th style="text-align:left"><?php echo __('Adresa firme'); ?></th>
+            <td style="width:85%;"><?php echo $vm_company['VmCompany']['address']; ?></td>
+        </tr>
+        <tr>
+            <th style="text-align:left"><?php echo __('Sedište firme'); ?></th>
+            <td style="width:85%;">
+                <?php echo $vm_company['VmCompany']['zip_code'] . ', ' . $vm_company['VmCompany']['city']; ?>
+            </td>
+        </tr>
+        <tr>
+            <th style="text-align:left"><?php echo __('E-mail firme'); ?></th>
+            <td style="width:85%;"><?php echo $vm_company['VmCompany']['email']; ?></td>
+        </tr>
+    </table>
+
+</div>
+
+
+
+<!-- TABS_LIST -->
 <ul class="tabs left">
-    <li><a href="#tabr1">Registrations</a></li>
-    <li><a href="#tabr2">Repairs</a></li>
-    <li><a href="#tabr3">Maintenances</a></li>
+    <li><a href="#tab_vm_registrations"><i class="icon-tag" style="color :darkgreen"></i><?php echo __('Registracije'); ?></a></li>
+    <li><a href="#tab_vm_repairs"><i class="icon-cogs" style="color :black"></i><?php echo __('Popravke'); ?></a></li>
+    <li><a href="#tab_vm_maintenances"><i class="icon-tint" style="color :orange"></i><?php echo __('Održavanja'); ?></a></li>
+    <li><a href="#tab_vm_external_workers"><i class="icon-group" style="color :blue"></i><?php echo __('Radnici'); ?></a></li>
 </ul>
 
 
-<div id="tabr1" class="tab-content">
-    <?php
-    if (isset($vm_company['VmRegistration']) && count($vm_company['VmRegistration']) > 0) {
-    ?>
+<!-- TAB_REGISTRATIONS -->
+<?php include('includes/registrations.ctp'); ?>
+<!-- TAB_FILES -->
+<?php include('includes/repairs.ctp'); ?>
 
-        <table>
+<!-- TAB_FUELS -->
+<?php include('includes/maintenances.ctp'); ?>
 
-            <tr>
-
-            </tr>
-
-            <tr>
-                <th>
-                    Registration date
-                </th>
-                <th>
-                    Expitarion date
-                </th>
-            </tr>
-
-            <?php
-
-            foreach ($vm_company['VmRegistration'] as $registration) {
-            ?>
-                <tr>
-                    <td><?= $registration['registration_date'] ?></td>
-                    <td><?= $registration['expiration_date'] ?></td>
-                    <!-- <td><?= $registration['VmHrWorker']['first_name'] ?></td> -->
-
-                    <td>
-                        <!-- <?= $this->Html->link(
-                                    'View',
-                                    [
-                                        'controller' => 'vmregistrations',
-                                        'action' => 'view', $registration['id']
-                                    ]
-                                ) ?> -->
-
-                        <ul class="button-bar">
-                            <li class=""><?php echo $this->Js->link('<i class="icon-eye-open"></i>View', array('controller' => 'vmregistrations', 'action' => 'view', $registration['id']), array('update' => '#container', 'buffer' => false, 'escape' => false, 'before' => '$(".submit_loader").show();', 'success' => 'history.pushState(null, "MikroERP - Edit menu", this.url); $(document).attr("title", "MikroERP - Edit menu");')); ?></li>
-
-                        </ul>
+<!-- TAB_FUELS -->
+<?php include('includes/external_workers.ctp'); ?>
 
 
-                    </td>
-                </tr>
-            <?php
+<script>
+    $('#VmRegistrationSpentTimeDay').select2({
+        minimumResultsForSearch: -1
+    });
+    $('#VmRegistrationSpentTimeHour').select2({
+        minimumResultsForSearch: -1
+    });
+    $('#VmRegistrationSpentTimeMinute').select2({
+        minimumResultsForSearch: -1
+    });
+    $('#VmRepairSpentTimeDay').select2({
+        minimumResultsForSearch: -1
+    });
+    $('#VmRepairSpentTimeHour').select2({
+        minimumResultsForSearch: -1
+    });
+    $('#VmRepairSpentTimeMinute').select2({
+        minimumResultsForSearch: -1
+    });
+    $('#VmMaintenanceSpentTimeDay').select2({
+        minimumResultsForSearch: -1
+    });
+    $('#VmMaintenanceSpentTimeHour').select2({
+        minimumResultsForSearch: -1
+    });
+    $('#VmMaintenanceSpentTimeMinute').select2({
+        minimumResultsForSearch: -1
+    });
+
+    $('#addNewRegistration').click(function(e) {
+        $('#addNewRegistrationForm').show();
+        $(this).hide();
+
+    })
+
+    $('#addNewRegistrationFormClose').click(function() {
+        $('#addNewRegistrationForm').hide();
+        $('#addNewRegistration').show();
+    })
+
+    $('#VmRegistrationHrWorkerId').select2({});
+    $('#VmRegistrationVmVehicleId').select2({});
+
+    $('#addNewRepair').click(function(e) {
+        $('#addNewRepairForm').show();
+        $(this).hide();
+
+    })
+
+    $('#addNewRepairFormClose').click(function() {
+        $('#addNewRepairForm').hide();
+        $('#addNewRepair').show();
+    })
+
+    $('#VmRepairVmVehicleId').select2({});
+    $('#VmCrossedKmHrWorkerId').select2({});
+    $('#VmRepairVmDamageId').select2({});
+
+
+
+    $('#VmRepairVmVehicleId').change(function(e) {
+
+        var vm_vehicle_id = $(this).val();
+
+        $.ajax({
+            url: '<?php echo $this->Html->url(array('controller' => 'vmRepairs', 'action' => 'save')); ?>',
+            dataType: "json",
+            type: "POST",
+            evalScripts: true,
+            data: {
+                vm_vehicle_id: vm_vehicle_id
+            },
+            success: function(response) {
+                console.log(response);
+                $('#VmRepairVmDamageId').empty();
+                Object.keys(response).sort().forEach(function(key, i) {
+                    $('#VmRepairVmDamageId').append($("<option></option>").attr("value", key).text(response[key]));
+                });
             }
-        } else {
-
-            ?>
-            <h2>Nema dodatih registracija</h2>
-
-
-        <?php
-        }
-        ?>
-        </table>
-</div>
-
-<div id="tabr2" class="tab-content">
-
-    repairs2
-
-    <?=
-    $this->Html->link('Add repair', ['controller' => 'vmmaintenances', 'action' => 'addByCompany', $vm_company['VmCompany']['id']])
-
-    ?>
-    <h4>Pogledaj ovo iznad /addByCompany</h4>
+        });
+    })
 
 
 
-    <?php
-    if (isset($vm_repairs) && count($vm_repairs) > 0) {
-    ?>
+    $('#addNewMaintenance').click(function(e) {
+        $('#addNewMaintenanceForm').show();
+        $(this).hide();
 
-        <table>
+    })
 
-            <tr>
-                <th>
-                    Amount
-                </th>
-                <th>
-                    Description
-                </th>
-                <th>
-                    Date
-                </th>
-                <th>
-                    Vehicle
-                </th>
-                <th>
-                    Spent time
-                </th>
-            </tr>
+    $('#addNewMaintenanceClose').click(function() {
+        $('#addNewMaintenanceForm').hide();
+        $('#addNewMaintenance').show();
+    })
 
+    $('#addNewExternalWorker').click(function(e) {
+        $('#addNewExternalWorkerForm').show();
+        $(this).hide();
 
-            <?php
+    })
 
-            foreach ($vm_repairs as $vm_repair) {
-            ?>
-                <tr>
-                    <td><?= $vm_repair['VmRepair']['amount'] ?></td>
-                    <td><?= $vm_repair['VmRepair']['description'] ?></td>
-                    <td><?= 'datum koji cu dodati u vm_repairs' ?></td>
-                    <td><?= $vm_repair['VmRepair']['spent_time'] ?></td>
-                    <!-- <td><?= $vm_repair['VmCrossedKm']['date'] ?></td> -->
+    $('#addNewExternalWorkerClose').click(function() {
+        $('#addNewExternalWorkerForm').hide();
+        $('#addNewExternalWorker').show();
+    })
 
-
-                    <td>
-                        <ul class="button-bar">
-                            <?php
-                            if (isset($vm_repair['VmVehicle']) && isset($vm_repair['VmVehicle']['brand_and_model'])) {
-                            ?>
-                                <li class="first"><?php echo $this->Js->link('<i class="icon-eye-open"></i>' . $vm_repair['VmVehicle']['brand_and_model'], array('controller' => 'vmcompanies', 'action' => 'view', $vm_repair['VmVehicle']['id']), array('update' => '#container', 'buffer' => false, 'escape' => false, 'before' => '$(".submit_loader").show();', 'success' => 'history.pushState(null, "MikroERP - Edit menu", this.url); $(document).attr("title", "MikroERP - Edit menu");')); ?></li>
-                            <?php
-                            } else {
-                            ?>
-
-                                <li class="first"><?php echo $this->Js->link('<i class="icon-eye-close"></i>' . 'UNKNOWN', array('controller' => 'vmcompanies', 'action' => 'view', $vm_repair['VmVehicle']['id'], 'disabled'=>true), array('update' => '#container', 'buffer' => false, 'escape' => false, 'before' => 'return false;$(".submit_loader").show();', 'success' => 'history.pushState(null, "MikroERP - Edit menu", this.url); $(document).attr("title", "MikroERP - Edit menu");')); ?></li>
-                            <?php
-                            }
-                            ?>
-                        </ul>
-                    </td>
-
-                    <td>
-                        <!-- bukv samo treba da pokazem amount description i datum, nema potrebe da imam view za maintenances -->
-                        <ul class="button-bar">
-                            <li class="first"><?php echo $this->Js->link('<i class="icon-eye-open"></i>View', array('controller' => 'vmmaintenances', 'action' => 'view', $vm_repair['VmMaintenance']['id']), array('update' => '#container', 'buffer' => false, 'escape' => false, 'before' => '$(".submit_loader").show();', 'success' => 'history.pushState(null, "MikroERP - Edit menu", this.url); $(document).attr("title", "MikroERP - Edit menu");')); ?></li>
-                        </ul>
-
-                    </td>
-
-                </tr>
-            <?php
-            }
-
-            ?>
-        </table>
-    <?php
-    } else {
-
-    ?>
-        <h2>Niste uneli popravku vozila</h2>
-
-    <?php
-    }
-
-    var_dump($vm_repairs);
-    ?>
-
-
-</div>
-
-<div id="tabr3" class="tab-content">
-
-
-
-    <?=
-    $this->Html->link('Add maintenance', ['controller' => 'vmmaintenances', 'action' => 'addByCompany', $vm_company['VmCompany']['id']])
-
-    ?>
-
-
-
-    <?php
-    if (isset($vm_maintenances) && count($vm_maintenances) > 0) {
-    ?>
-
-        <table>
-
-            <tr>
-                <th>
-                    Amount
-                </th>
-                <th>
-                    Description
-                </th>
-                <th>
-                    Date
-                </th>
-                <th>
-                    Vehicle
-                </th>
-            </tr>
-
-
-            <?php
-
-            foreach ($vm_maintenances as $vm_maintenance) {
-            ?>
-                <tr>
-                    <td><?= $vm_maintenance['VmMaintenance']['amount'] ?></td>
-                    <td><?= $vm_maintenance['VmMaintenance']['description'] ?></td>
-                    <!-- <td><?= $vm_maintenance['VmCrossedKm']['date'] ?></td> -->
-                    <td><?= 'datum koji cu dodati u vm_maintenances' ?></td>
-
-
-                    <td>
-                        <ul class="button-bar">
-                            <li class="first"><?php echo $this->Js->link('<i class="icon-eye-open"></i>' . $vm_maintenance['VmVehicle']['brand_and_model'], array('controller' => 'vmcompanies', 'action' => 'view', $vm_maintenance['VmCompany']['id']), array('update' => '#container', 'buffer' => false, 'escape' => false, 'before' => '$(".submit_loader").show();', 'success' => 'history.pushState(null, "MikroERP - Edit menu", this.url); $(document).attr("title", "MikroERP - Edit menu");')); ?></li>
-                        </ul>
-                    </td>
-
-                    <td>
-                        <!-- bukv samo treba da pokazem amount description i datum, nema potrebe da imam view za maintenances -->
-                        <ul class="button-bar">
-                            <li class="first"><?php echo $this->Js->link('<i class="icon-eye-open"></i>View', array('controller' => 'vmmaintenances', 'action' => 'view', $vm_maintenance['VmMaintenance']['id']), array('update' => '#container', 'buffer' => false, 'escape' => false, 'before' => '$(".submit_loader").show();', 'success' => 'history.pushState(null, "MikroERP - Edit menu", this.url); $(document).attr("title", "MikroERP - Edit menu");')); ?></li>
-                        </ul>
-
-                    </td>
-
-                </tr>
-            <?php
-            }
-
-            ?>
-        </table>
-    <?php
-    } else {
-
-    ?>
-        <h2>Niste ostetili vozilo</h2>
-
-    <?php
-    }
-    ?>
-
-
-</div>
+    $('#VmCrossedKmHrWorkerIdVmRepair').select2({}); 
+    $('#VmMaintenanceVmVehicleId').select2({});
+    $('#VmCrossedKmHrWorkerIdVmMaintenance').select2({}); 
+</script>

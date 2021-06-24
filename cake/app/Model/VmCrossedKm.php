@@ -4,77 +4,115 @@ App::uses('AppModel', 'Model');
  * VmCrossedKm Model
  *
  */
-class VmCrossedKm extends AppModel {
+class VmCrossedKm extends AppModel
+{
     public $belongsTo = array(
         'VmVehicle' => array(
-			'className' => 'VmVehicle',
-			'foreignKey' => 'vm_vehicle_id',
-			'dependent' => false,
-			'conditions' => '',
-			'fields' => '',
-			'order' => '',
-			'limit' => '',
-			'offset' => '',
-			'exclusive' => '',
-			'finderQuery' => '',
-			'counterQuery' => ''
-		),
+            'className' => 'VmVehicle',
+            'foreignKey' => 'vm_vehicle_id',
+            'dependent' => false,
+            'conditions' => '',
+            'fields' => '',
+            'order' => '',
+            'limit' => '',
+            'offset' => '',
+            'exclusive' => '',
+            'finderQuery' => '',
+            'counterQuery' => ''
+        ),
         'HrWorker' => array(
-			'className' => 'HrWorker',
-			'foreignKey' => 'hr_worker_id',
-			'dependent' => false,
-			'conditions' => '',
-			'fields' => '',
-			'order' => '',
-			'limit' => '',
-			'offset' => '',
-			'exclusive' => '',
-			'finderQuery' => '',
-			'counterQuery' => ''
-		),
-        );
-
-        public $hasMany = array(
-            'VmFuel' => array(
-                'className' => 'VmFuel',
-                'foreignKey' => 'vm_crossed_km_id',
-                'dependent' => false,
-                'conditions' => '',
-                'fields' => '',
-                'order' => '',
-                'limit' => '',
-                'offset' => '',
-                'exclusive' => '',
-                'finderQuery' => '',
-                'counterQuery' => ''
-            ),
-            'VmRepair' => array(
-                'className' => 'VmRepair',
-                'foreignKey' => 'vm_crossed_km_id',
-                'dependent' => false,
-                'conditions' => '',
-                'fields' => '',
-                'order' => '',
-                'limit' => '',
-                'offset' => '',
-                'exclusive' => '',
-                'finderQuery' => '',
-                'counterQuery' => ''
-            ),
-            'VmMaintenance' => array(
-                'className' => 'VmMaintenance',
-                'foreignKey' => 'vm_crossed_km_id',
-                'dependent' => false,
-                'conditions' => '',
-                'fields' => '',
-                'order' => '',
-                'limit' => '',
-                'offset' => '',
-                'exclusive' => '',
-                'finderQuery' => '',
-                'counterQuery' => ''
-            ),
-    
-    
+            'className' => 'HrWorker',
+            'foreignKey' => 'hr_worker_id',
+            'dependent' => false,
+            'conditions' => '',
+            'fields' => '',
+            'order' => '',
+            'limit' => '',
+            'offset' => '',
+            'exclusive' => '',
+            'finderQuery' => '',
+            'counterQuery' => ''
+        ),
     );
+
+    public $hasMany = array(
+        'VmFuel' => array(
+            'className' => 'VmFuel',
+            'foreignKey' => 'vm_crossed_km_id',
+            'dependent' => false,
+            'conditions' => '',
+            'fields' => '',
+            'order' => '',
+            'limit' => '',
+            'offset' => '',
+            'exclusive' => '',
+            'finderQuery' => '',
+            'counterQuery' => ''
+        ),
+        'VmRepair' => array(
+            'className' => 'VmRepair',
+            'foreignKey' => 'vm_crossed_km_id',
+            'dependent' => false,
+            'conditions' => '',
+            'fields' => '',
+            'order' => '',
+            'limit' => '',
+            'offset' => '',
+            'exclusive' => '',
+            'finderQuery' => '',
+            'counterQuery' => ''
+        ),
+        'VmMaintenance' => array(
+            'className' => 'VmMaintenance',
+            'foreignKey' => 'vm_crossed_km_id',
+            'dependent' => false,
+            'conditions' => '',
+            'fields' => '',
+            'order' => '',
+            'limit' => '',
+            'offset' => '',
+            'exclusive' => '',
+            'finderQuery' => '',
+            'counterQuery' => ''
+        ),
+
+
+    );
+
+    public $validate = array(
+        'total_kilometers' => array(
+            'notempty' => array(
+                'rule' => array('notempty'),
+                'message' => 'Niste uneli trenutnu kilometražu'
+            ),
+            'numeric' => array(
+                'rule' => array('naturalNumber'),
+                'message' => 'Niste pravilno uneli trenutnu kilometražu'
+            ),
+            
+        ),
+        'report_datetime' => array(
+            'date' => array(
+                'rule' => array('date'),
+                'message' => 'Niste izabrali datum'
+            )
+        ),
+        'vm_vehicle_id' => array(
+			'numeric' => array(
+				'rule' => 'numeric',
+				'message' => 'Niste izabrali vozilo'
+			)
+		),
+		'hr_worker_id' => array(
+			'numeric' => array(
+				'rule' => 'numeric',
+				'message' => 'Niste izabrali radnika'
+			)
+		),
+
+    );
+    public function moje ($a, $b, $c)
+    {
+        return 1;
+    }
 }

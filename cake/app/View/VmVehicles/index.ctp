@@ -29,7 +29,7 @@
 
 
 
-        <?php echo $this->Form->input('hr_worker_id', array('label' => 'Zaposleni', 'type' => 'select', 'div' => false, 'hiddenField' => false, 'options' => $hr_workers, 'empty' => 'Svi zaposleni')); ?>
+        <?php echo $this->Form->input('hr_worker_id', array('label' => 'Radnik', 'type' => 'select', 'div' => false, 'hiddenField' => false, 'options' => $hr_workers, 'empty' => 'Svi zaposleni')); ?>
 
 
 
@@ -67,10 +67,6 @@
                     <th><?php echo __('U upotrebi'); ?></th>
                     <th><?php echo __('Boja'); ?></th>
 
-
-
-
-
                     <th></th>
                 </tr>
             </thead>
@@ -104,7 +100,7 @@
 
 
 
-                        <?php if ($vm_vehicle['VmVehicle']['in_use'] == 1) : ?>
+                        <?php if ($vm_vehicle['VmVehicle']['in_use']) : ?>
                             <td style="background-color: #feffee;">
                             <?php echo __('U upotrebi'); ?>
                             </td>
@@ -116,23 +112,7 @@
                         <?php endif; ?>
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
                         <td><?php echo $vm_vehicle['VmVehicle']['color']; ?></td>
-
-
-
 
                         <td class="right" style="white-space: nowrap;">
                             <ul class="button-bar">
