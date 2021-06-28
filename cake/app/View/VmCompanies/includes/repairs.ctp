@@ -96,7 +96,7 @@
                 <?php echo $this->Form->label('VmCrossedKm.total_kilometers', __('Pređeni kilometri')); ?>
                 <?php echo $this->Form->input('VmCrossedKm.total_kilometers', array('type' => 'number', 'label' => false, 'style' => 'margin: 0; width: 100%;', 'required' => false, 'placeholder' => __('Unesite pređene kilometre'))); ?>
             </div>
-            
+
 
             <div class="col_9">
                 <?php echo $this->Form->label('VmRepair.description', __('Opis popravke')); ?>
@@ -151,49 +151,6 @@
 
     </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     <?php if (empty($vm_repairs)) : ?>
         <div class="notice warning">
             <i class="icon-warning-sign icon-large"></i>
@@ -205,56 +162,30 @@
 
             <thead>
                 <th><?php echo __('Cena popravke'); ?></th>
-                <th><?php echo __('Utrošeno vreme'); ?></th>
                 <th><?php echo __('Opis popravke'); ?></th>
-                <th><?php echo __('Vreme popravke'); ?></th>
                 <th><?php echo __('Radnik'); ?></th>
                 <th><?php echo __('Firma'); ?></th>
-                <th><?php echo __('Šteta'); ?></th>
                 <th></th>
             </thead>
             <tbody>
                 <?php foreach ($vm_repairs as $vm_repair) : ?>
                     <tr>
                         <td><?php echo $vm_repair['VmRepair']['amount']; ?></td>
-                        <td>
 
-                            <?php
-                            $spent_time = $vm_repair['VmRepair']['spent_time'];
-                            $m = floor(($spent_time % 3600) / 60);
-                            $h = floor(($spent_time % 86400) / 3600);
-                            $d = floor($spent_time / 86400);
-
-                            $spent_time = '';
-                            $d ? $spent_time = ($d == 1 ?  __(' dan i ') : $d . __(' dana i ')) : null;
-                            $spent_time .= $h . ':' . $m;
-                            echo $spent_time;
-                            ?>
-                        </td>
                         <td><?php echo $vm_repair['VmRepair']['description']; ?></td>
-                        <td><?php echo $vm_repair['VmCrossedKm']['report_datetime']; ?></td>
                         <td><?php echo $vm_repair['VmCrossedKm']['HrWorker']['first_name']; ?></td>
-                        <td><?php echo $this->Html->link(
-                                $vm_repair['VmCompany']['name'],
-                                array(
-                                    'controller' => 'vmCompanies',
-                                    'action' => 'view',
-                                    $vm_repair['VmCompany']['id']
-                                )
-                            ); ?>
+                        <td><?php echo
+                            !empty($vm_repair['VmDamage']['VmVehicle']['brand_and_model']) ?
+                                $this->Html->link(
+                                    $vm_repair['VmDamage']['VmVehicle']['brand_and_model'],
+                                    array(
+                                        'controller' => 'vmVehicles',
+                                        'action' => 'view',
+                                        $vm_repair['VmDamage']['VmVehicle']['id']
+                                    )
+                                ) : null; ?>
                         </td>
-                        <td><?php echo $this->Html->link(
-                                strlen($vm_repair['VmDamage']['description']) < 15 ?
-                                    $vm_repair['VmDamage']['description'] :
-                                    substr($vm_repair['VmDamage']['description'], 0, 10) . '...',
-                                array(
-                                    'controller' => 'vmCompanies',
-                                    'action' => 'view',
-                                    $vm_repair['VmCompany']['id']
-                                )
-                            ); ?>
-                        </td>
-                        </td>
+
                         <td>
                             <ul class="button-bar">
                                 <li class="first">

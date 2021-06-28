@@ -61,9 +61,7 @@
 
             <thead>
                 <th><?php echo __('Cena održavanja'); ?></th>
-                <th><?php echo __('Utrošeno vreme'); ?></th>
                 <th><?php echo __('Opis održavanja'); ?></th>
-                <th><?php echo __('Vreme održavanja'); ?></th>
                 <th><?php echo __('Radnik'); ?></th>
                 <th><?php echo __('Vozilo'); ?></th>
                 <th><?php echo __('Firma'); ?></th>
@@ -73,20 +71,7 @@
                 <?php foreach ($vm_maintenances as $vm_maintenance) : ?>
                     <tr>
                         <td><?php echo $vm_maintenance['VmMaintenance']['amount']; ?></td>
-                        <td>
-
-                            <?php
-                            $spent_time = $vm_maintenance['VmMaintenance']['spent_time'];
-                            $m = floor(($spent_time % 3600) / 60);
-                            $h = floor(($spent_time % 86400) / 3600);
-                            $d = floor($spent_time / 86400);
-
-                            $spent_time = '';
-                            $d ? $spent_time = ($d == 1 ?  __(' dan i ') : $d . __(' dana i ')) : null;
-                            $spent_time .= $h . ':' . $m;
-                            echo $spent_time;
-                            ?>
-                        </td>
+                        
                         <td>
                             <?php echo strlen($vm_maintenance['VmMaintenance']['description']) < 15 ?
                                 $vm_maintenance['VmMaintenance']['description'] :
@@ -94,10 +79,9 @@
                             ?>
                         </td>
 
-
-
-                        <td><?php echo $vm_maintenance['VmCrossedKm']['report_datetime']; ?></td>
-                        <td><?php echo $vm_maintenance['VmCrossedKm']['HrWorker']['first_name']; ?></td>
+                        <td><?php echo !empty($vm_maintenance['VmCrossedKm']['HrWorker']['first_name']) ?
+                        $vm_maintenance['VmCrossedKm']['HrWorker']['first_name']
+                        : null; ?></td>
                         <td>
                             <?php echo $this->Html->link(
                                 $vm_maintenance['VmVehicle']['brand_and_model'],
@@ -128,7 +112,7 @@
                                     <?php echo $this->Html->link('<i class="icon-edit" style="color :orange"></i>', array('controller' => 'vmMaintenances', 'action' => 'save', $vm_maintenance['VmMaintenance']['id']), array('title' => __('Izmena'), 'escape' => false)); ?>
                                 </li>
                                 <li class="last">
-                                    <?php echo $this->Form->postLink('<i class="icon-trash" style="color :red"></i>', array('controller' => 'vmMaintenances', 'action' => 'delete', $vm_maintenance['VmMaintenance']['id']), array('title' => __('Brisanje'), 'escape' => false, 'confirm' => 'Da li ste sigurni da želite da izbrišete ovo održavanje?')); ?>
+                                    <?php echo $this->Form->postLink('<i class="icon-trash" style="color :red"></i>', array('controller' => 'vmMaintenances', 'action' => 'delete', $vm_maintenance['VmMaintenance']['id']), array('title' => __('Brisanje'), 'escape' => false, 'confirm' => 'Da li ste sigurni da želite da izbrišete održavanje?')); ?>
                                 </li>
                             </ul>
 

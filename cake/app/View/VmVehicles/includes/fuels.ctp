@@ -3,11 +3,14 @@
     <div style="float:left; margin:0 0 24px 20px;">
         <ul class="button-bar">
             <li class="first">
-                <?php echo $this->Html->link('<i class="icon-plus-sign" style="color :#669E00"></i> ' . __('Dodaj novo gorivo'),
-                 'javascript:void(0);',
-                  array('id' => 'addNewFuel', 'escape' => false,
-                  'style' => isset($errors['Fuels']) ? 'display: none' : 'display: block'
-                  )); ?>
+                <?php echo $this->Html->link(
+                    '<i class="icon-plus-sign" style="color :#669E00"></i> ' . __('Dodaj novo gorivo'),
+                    'javascript:void(0);',
+                    array(
+                        'id' => 'addNewFuel', 'escape' => false,
+                        'style' => isset($errors['Fuels']) ? 'display: none' : 'display: block'
+                    )
+                ); ?>
             </li>
         </ul>
     </div>
@@ -70,9 +73,11 @@
                         ?>
                     </div>
                     <div class="button_box">
-                        <?php echo $this->Html->link(__('Poništi'), 
-                        'javascript:void(0)', 
-                        array('id' => 'addNewFuelClose', 'class' => 'button', 'style' => 'margin:20px 0 20px 0;')); 
+                        <?php echo $this->Html->link(
+                            __('Poništi'),
+                            'javascript:void(0)',
+                            array('id' => 'addNewFuelClose', 'class' => 'button', 'style' => 'margin:20px 0 20px 0;')
+                        );
                         ?>
                         <?php echo $this->Form->end(); ?>
                     </div>
@@ -133,10 +138,14 @@
                                 </li>
                                 <li class="last">
                                     <?php
-                                    echo $this->Html->link(
+                                    echo $this->Form->postLink(
                                         '<i class="icon-trash" style="color:red;"></i>',
                                         array('controller' => 'vmFuels', 'action' => 'delete', $vm_fuel['VmFuel']['id']),
-                                        array('escape' => false, 'title' => __('Detalji'))
+                                        array(
+                                            'escape' => false,
+                                            'title' => __('Brisanje'),
+                                            'confirm' =>  __('Da li ste sigurni da želite da izbrišete gorivo?')
+                                        )
                                     );
                                     ?>
 

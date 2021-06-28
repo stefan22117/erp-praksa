@@ -96,27 +96,29 @@
 
                         <td>
                             <?php
-                            echo $this->Html->link(
-                                $vm_registration['VmVehicle']['brand_and_model'],
-                                array(
-                                    'controller' => 'VmVehicles',
-                                    'action' => 'view',
-                                    $vm_registration['VmVehicle']['id']
-                                )
-                            )
+                            echo !empty($vm_registration['VmVehicle']['brand_and_model']) ?
+                                $this->Html->link(
+                                    $vm_registration['VmVehicle']['brand_and_model'],
+                                    array(
+                                        'controller' => 'VmVehicles',
+                                        'action' => 'view',
+                                        $vm_registration['VmVehicle']['id']
+                                    )
+                                ) : null;
                             ?>
                         </td>
 
                         <td>
                             <?php
-                            echo $this->Html->link(
-                                $vm_registration['VmCompany']['name'],
-                                array(
-                                    'controller' => 'VmCompanies',
-                                    'action' => 'view',
-                                    $vm_registration['VmCompany']['id']
-                                )
-                            )
+                            echo  !empty($vm_registration['VmCompany']['name']) ?
+                                $this->Html->link(
+                                    $vm_registration['VmCompany']['name'],
+                                    array(
+                                        'controller' => 'VmCompanies',
+                                        'action' => 'view',
+                                        $vm_registration['VmCompany']['id']
+                                    )
+                                ) : null;
                             ?>
                         </td>
 

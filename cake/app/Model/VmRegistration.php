@@ -6,6 +6,7 @@ App::uses('AppModel', 'Model');
  */
 class VmRegistration extends AppModel
 {
+	public $virtualFields = array('registration'=>'CONCAT(VmRegistration.registration_date, " - ", VmRegistration.expiration_date)');
 
 	public $validate = array(
 		'registration_date' => array(
@@ -56,10 +57,6 @@ class VmRegistration extends AppModel
 		),
 
 	);
-
-
-
-
 
 
 	public $belongsTo = array(
@@ -121,4 +118,26 @@ class VmRegistration extends AppModel
 
 
 	);
+
+	private $vm_registration;
+	public function beforeDelete($cascade = true)
+	{
+		$this->vm_registration = $this->findById($this->id);
+	}
+	public function afterDelete()
+	{
+		$this->VmRegistrationFile = ClassRegistry::init('VmRegistrationFile');
+
+		$conditions = array('VmRegistrationFile.vm_registration_id'=> $this->vm_registration['VmRegistration']['id']);
+
+		foreach($this->VmRegistrationFile->findAllByVmRegistrationId($this->vm_registration['VmRegistration']['id']) as $vm_registration_file){
+			if (file_exists(WWW_ROOT . 'img' . DS . $vm_registration_file['VmRegistrationFile']['path'])) {
+				unlink(WWW_ROOT . 'img' . DS . $vm_registration_file['VmRegistrationFile']['path']);
+			}
+		}
+
+		$this->VmRegistrationFile->deleteAll(
+			$conditions
+		);
+	}
 }

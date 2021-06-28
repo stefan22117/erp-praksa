@@ -4,27 +4,25 @@ class VmregistrationsController extends AppController
 {
     public function beforeFilter()
     {
-        $this->Auth->allow('index', 'add', 'view', 'edit', 'save', 'delete');
+        parent::beforeFilter();
+        $this->Auth->allow('index', 'view', 'save', 'delete');
         if (
-			strtolower($this->request['action']) == 'view' ||
-			strtolower($this->request['action']) == 'save'
-		) {
-			$vm_registration_id = !empty($this->request['pass']) ? $this->request['pass'][0] : 0;
+            strtolower($this->request['action']) == 'view' ||
+            strtolower($this->request['action']) == 'save'
+        ) {
+            $vm_registration_id = !empty($this->request['pass']) ? $this->request['pass'][0] : 0;
 
-			if ($vm_registration_id) {
-				$vm_registration = $this->VmVehicle->findById($vm_registration_id);
-				if (empty($vm_registration)) {
-					$this->Session->setFlash(__('Tražena registracija nije pronađena'), 'flash_error');
-					return $this->redirect(array('controller' => 'vmRegistrations', 'action' => 'index'));
-				}
-			}
-			else if(strtolower($this->request['action']) != 'save')
-			{
-				$this->Session->setFlash(__('Niste prosledili id registracije'), 'flash_error');
-				return $this->redirect(array('controller' => 'vmRegistrations', 'action' => 'index'));
-			}
-
-		}
+            if ($vm_registration_id) {
+                $vm_registration = $this->VmRegistration->findById($vm_registration_id);
+                if (empty($vm_registration)) {
+                    $this->Session->setFlash(__('Tražena registracija nije pronađena'), 'flash_error');
+                    return $this->redirect(array('controller' => 'vmRegistrations', 'action' => 'index'));
+                }
+            } else if (strtolower($this->request['action']) != 'save') {
+                $this->Session->setFlash(__('Niste prosledili id registracije'), 'flash_error');
+                return $this->redirect(array('controller' => 'vmRegistrations', 'action' => 'index'));
+            }
+        }
     }
 
 
@@ -114,7 +112,6 @@ class VmregistrationsController extends AppController
 
 
 
-
         $options = array(
             'conditions' => $conditions,
             'joins' => $joins,
@@ -123,12 +120,6 @@ class VmregistrationsController extends AppController
             'limit' => 5,
             'fields' => 'DISTINCT VmRegistration.*'
         );
-
-
-
-
-
-
 
 
         $this->Paginator->settings = $options;
@@ -169,7 +160,7 @@ class VmregistrationsController extends AppController
             );
 
 
-            if($this->request->is('get')){
+            if ($this->request->is('get')) {
                 $this->request->data = $vm_registration;
             }
         }
@@ -187,16 +178,22 @@ class VmregistrationsController extends AppController
 
 
             $vm_registration = $this->request->data;
+            $vm_registration['VmRegistration']['id'] = $vm_registration_id;
+            
             $vm_registration['VmRegistration']['spent_time'] =
                 $vm_registration['VmRegistration']['spent_time']['day'] * 86400 +
                 $vm_registration['VmRegistration']['spent_time']['hour'] * 3600 +
                 $vm_registration['VmRegistration']['spent_time']['min'] * 60;
 
-            if ($this->VmRegistration->save($vm_registration)) {
+            if ($vm_registration = $this->VmRegistration->save($vm_registration)) {
+                $this->VmChangeLog->saveVmVehicleLog($this->VmRegistration, $vm_registration['VmRegistration']['id'], $this->Session, $this->Auth);
+        
                 $this->Session->setFlash($success, 'flash_success');
                 if (
                     strpos(strtolower($this->referer()), 'vmvehicles') !== false ||
-                    strpos(strtolower($this->referer()), 'vm_vehicles') !== false
+                    strpos(strtolower($this->referer()), 'vm_vehicles') !== false ||
+                    strpos(strtolower($this->referer()), 'vmcompanies') !== false ||
+                    strpos(strtolower($this->referer()), 'vm_companies') !== false
                 ) {
                     return $this->redirect($this->referer() . '#tab_vm_registrations');
                 } else {
@@ -222,130 +219,6 @@ class VmregistrationsController extends AppController
         }
     }
 
-    public function add()
-
-    {
-        $vehicle_id = $this->request->data['VmRegistration']['vm_vehicle_id'];
-
-        if ($vehicle_id && $vm_vehicle = $this->VmVehicle->findById($vehicle_id)) {
-
-            $this->set('vm_vehicle', $vm_vehicle);
-        } else {
-            if ($vehicle_id && !$vm_vehicle) {
-                $this->Session->setFlash('Nije pronadjeno vozilo', 'flash_error');
-            }
-
-            $this->set('vm_vehicles', $this->VmVehicle->find('list', array(
-                'fields' => array('VmVehicle.id', 'VmVehicle.brand_and_model')
-            )));
-        }
-
-        $this->set('hr_workers', $this->HrWorker->find('list', array(
-            'fields' => array('HrWorker.id', 'HrWorker.first_name')
-        )));
-        $this->set('vm_companies', $this->VmCompany->find('list', array(
-            'fields' => array('VmCompany.id', 'VmCompany.name')
-        )));
-        if ($this->request->is('post')) {
-
-            $vm_registration = $this->request->data;
-            $vm_registration['VmRegistration']['spent_time'] =
-                $vm_registration['VmRegistration']['spent_time']['day'] * 86400 +
-                $vm_registration['VmRegistration']['spent_time']['hour'] * 3600 +
-                $vm_registration['VmRegistration']['spent_time']['min'] * 60;
-
-
-            $this->VmRegistration->create();
-            if ($this->VmRegistration->save($vm_registration)) {
-                $this->Session->setFlash('Uspesno ste dodali registraciju', 'flash_success');
-            } else {
-
-                $this->Session->setFlash('Greška pri dodavanju registracije', 'flash_error');
-                $this->Session->write('errors.VmRegistration', $this->VmRegistration->validationErrors);
-                $this->Session->write(
-                    'errors.data',
-                    $this->request->data
-                );
-            }
-            $this->redirect($this->referer() . '#tabr1');
-        }
-    }
-
-
-    public function edit($vm_registration_id = null)
-    {
-
-        if ($vm_registration_id == null) {
-            $this->Session->setFlash('Niste prosledili id registracije', 'flash_error');
-            return $this->redirect(array('action' => 'add'));
-        }
-        if (!($vm_registration = $this->VmRegistration->findById($vm_registration_id))) {
-            $this->Session->setFlash(__('Nema registracije sa ID-jem: ') . $vm_registration_id, 'flash_error');
-            return $this->redirect(array('action' => 'add'));
-        }
-
-
-
-        $this->set('vm_registration', $vm_registration);
-
-        $m = floor(($vm_registration['VmRegistration']['spent_time'] % 3600) / 60);
-        $h = floor(($vm_registration['VmRegistration']['spent_time'] % 86400) / 3600);
-        $d = floor($vm_registration['VmRegistration']['spent_time'] / 86400);
-
-
-
-        $vm_registration['VmRegistration']['spent_time'] = array(
-            'day' => $d,
-            'hour' => $h,
-            'min' => $m,
-        );
-
-
-
-
-        $vm_vehicles = [];
-        foreach ($this->VmVehicle->find('all') as $vm_vehicle) {
-
-            $vm_vehicles[$vm_vehicle['VmVehicle']['id']] = $vm_vehicle['VmVehicle']['brand_and_model'];
-        }
-        $this->set('vm_vehicles', $vm_vehicles);
-
-        $hr_workers = [];
-        foreach ($this->HrWorker->find('all') as $hr_worker) {
-
-            $hr_workers[$hr_worker['HrWorker']['id']] = $hr_worker['HrWorker']['first_name'];
-        }
-        $this->set('hr_workers', $hr_workers);
-        $vm_companies = [];
-        foreach ($this->VmCompany->find('all') as $vm_company) {
-            $vm_companies[$vm_company['VmCompany']['id']] = $vm_company['VmCompany']['name'];
-        }
-        $this->set('vm_companies', $vm_companies);
-        if ($this->request->is('post') || $this->request->is('put')) {
-
-            $vm_registration = $this->request->data;
-
-            $vm_registration['VmRegistration']['spent_time'] =
-                $vm_registration['VmRegistration']['spent_time']['day'] * 86400 +
-                $vm_registration['VmRegistration']['spent_time']['hour'] * 3600 +
-                $vm_registration['VmRegistration']['spent_time']['min'] * 60;
-
-            $this->VmRegistration->id = $vm_registration_id;
-
-
-            if ($this->VmRegistration->save($vm_registration)) {
-                $this->Session->setFlash('Uspesno ste dodali registraciju', 'flash_success');
-                return $this->redirect(array('controller' => 'vmVehicles', 'action' => 'view', $vm_registration['VmRegistration']['vm_vehicle_id']));
-            } else {
-                $this->Session->setFlash('Greska pri dodavanju registracije', 'flash_error');
-            }
-        } else {
-            $this->request->data = $vm_registration;
-        }
-    }
-
-
-
 
     public function view($vm_registration_id = null)
     {
@@ -366,20 +239,11 @@ class VmregistrationsController extends AppController
         $this->Session->delete('errors');
 
 
-
-
-
-
-
-
-
-
         $vm_registration = $this->VmRegistration->findById($vm_registration_id);
 
         $vm_registration_files = $this->VmRegistrationFile->findAllByVmRegistrationId($vm_registration_id);
 
         $vm_vehicle = $this->VmVehicle->findById($vm_registration['VmVehicle']['id']);
-        $vm_registration = $this->VmRegistration->findById($vm_registration['VmRegistration']['id']);
 
         for ($i = 0; $i < count($vm_registration['VmRegistrationFile']); $i++) {
             $vm_registration_files[$i]['VmVehicle'] = $vm_vehicle['VmVehicle'];
@@ -405,12 +269,35 @@ class VmregistrationsController extends AppController
         if (!$this->request->is('post')) {
             throw new MethodNotAllowedException();
         }
-
+        $vm_registration = $this->VmRegistration->findById($vm_registration_id);
         if ($this->VmRegistration->delete($vm_registration_id)) {
-            $this->Session->setFlash('Uspešno ste obrisali registraciju', 'flash_success');
+            $this->VmChangeLog->saveVmVehicleLog($this->VmRegistration, $vm_registration['VmVehicle']['id'], $this->Session, $this->Auth);
+        
+            $vm_registration_files = $this->VmRegistrationFile->findAllByVmRegistrationId($vm_registration_id);
+
+            foreach ($vm_registration_files as $vm_registration_file) {
+                try {
+                    if(file_exists('../webroot/img/' . $vm_registration_file['VmRegistrationFile']['path']))
+                    unlink('../webroot/img/' . $vm_registration_file['VmRegistrationFile']['path']);
+                    $this->VmRegistrationFile->delete($vm_registration_file['VmRegistrationFile']['id']);
+                } catch (Exception $e) {
+                }
+            }
+
+            $this->Session->setFlash('Uspešno ste izbrisali registraciju', 'flash_success');
         } else {
             $this->Session->setFlash('Došlo je do greške pri brisanju registracije', 'flash_error');
         }
-        $this->redirect($this->referer());
+
+        if (
+            strpos(strtolower($this->referer()), 'vmvehicles') !== false ||
+            strpos(strtolower($this->referer()), 'vm_vehicles') !== false ||
+            strpos(strtolower($this->referer()), 'vmcompanies') !== false ||
+            strpos(strtolower($this->referer()), 'vm_companies') !== false
+        ) {
+            return $this->redirect($this->referer() . '#tab_vm_registrations');
+        }
+
+        $this->redirect(array('action' => 'index'));
     }
 }

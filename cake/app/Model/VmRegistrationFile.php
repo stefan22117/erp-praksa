@@ -41,7 +41,13 @@ class VmRegistrationFile extends AppModel
 			'noPdf' => array(
 				// 'rule'=>'/^vehicle_files\/{1}.+\.pdf{1}$/',
 				'rule' => array('extension', array('pdf')),
-				'message' => 'Mora biti pdf'
+				'message' => 'Mora biti pdf fajl'
+			)
+		),
+		'vm_registration_id' => array(
+			'naturalNumber' => array(
+				'rule' => array('naturalNumber'),
+				'message' => 'Niste izabrali registraciju za koju dodajete fajl'
 			)
 		)
 

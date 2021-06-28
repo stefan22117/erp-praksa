@@ -1,8 +1,7 @@
-<!-- <h2>Registration file</h2> -->
 <ul class="breadcrumbs">
-    <li><?= $this->Html->link('Home', array('controller' => 'pages', 'action' => 'display')); ?></li>
-    <li><?= $this->Html->link('Registration files', array('controller' => 'vmRegistrationFiles', 'action' => 'index')); ?></li>
-    <li class="last"><a href="" onclick="return false">View</a></li>
+<li><?php echo $this->Html->link(__('Početna'), array('controller' => 'pages', 'action' => 'display')); ?></li>
+    <li><?= $this->Html->link(__('Registracioni fajlovi'), array('controller' => 'vmRegistrationFiles', 'action' => 'index')); ?></li>
+    <li class="last"><a href="" onclick="return false"><?php echo __('Detalji'); ?></a></li>
 </ul>
 
 

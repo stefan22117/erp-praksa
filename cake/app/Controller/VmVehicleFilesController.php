@@ -4,27 +4,26 @@ class VmVehicleFilesController extends AppController
 {
     public function beforeFilter()
     {
+        parent::beforeFilter();
         $this->Auth->allow('index', 'add', 'view', 'delete', 'download');
 
         if (
-			strtolower($this->request['action']) == 'view'
-		) {
-			$vm_vehicle_file_id = !empty($this->request['pass']) ? $this->request['pass'][0] : 0;
+            strtolower($this->request['action']) == 'view' ||
+            strtolower($this->request['action']) == 'delete'
+        ) {
+            $vm_vehicle_file_id = !empty($this->request['pass']) ? $this->request['pass'][0] : 0;
 
-			if ($vm_vehicle_file_id) {
-				$vm_vehicle_file = $this->VmVehicleFile->findById($vm_vehicle_file_id);
-				if (empty($vm_vehicle_file)) {
-					$this->Session->setFlash(__('Traženi fajl vozila nije pronađen'), 'flash_error');
-					return $this->redirect(array('controller' => 'vmVehicleFiles', 'action' => 'index'));
-				}
-			}
-			else
-			{
-				$this->Session->setFlash(__('Niste prosledili id fajla vozila'), 'flash_error');
-				return $this->redirect(array('controller' => 'vmVehicleFiles', 'action' => 'index'));
-			}
-
-		}
+            if ($vm_vehicle_file_id) {
+                $vm_vehicle_file = $this->VmVehicleFile->findById($vm_vehicle_file_id);
+                if (empty($vm_vehicle_file)) {
+                    $this->Session->setFlash(__('Traženi fajl vozila nije pronađen'), 'flash_error');
+                    return $this->redirect(array('controller' => 'vmVehicleFiles', 'action' => 'index'));
+                }
+            } else {
+                $this->Session->setFlash(__('Niste prosledili id fajla vozila'), 'flash_error');
+                return $this->redirect(array('controller' => 'vmVehicleFiles', 'action' => 'index'));
+            }
+        }
     }
 
     public $components = array('Paginator');
@@ -106,11 +105,8 @@ class VmVehicleFilesController extends AppController
 
         if ($this->request->is('post')) {
 
-
-
-
             $file = $this->request->data['VmVehicleFile']['file'];
-
+            
             $vm_vehicle_id = $vm_vehicle_id == null ?
                 $this->data['VmVehicleFile']['vm_vehicle_id']
                 : $vm_vehicle_id;
@@ -123,17 +119,19 @@ class VmVehicleFilesController extends AppController
             }
 
 
-            $vm_vehicle_file = [
-                'VmVehicleFile' => [
+            $vm_vehicle_file = array(
+                'VmVehicleFile' => array(
                     'title' => $this->request->data['VmVehicleFile']['title'],
                     'path' => 'vehicle_files/' . $new_name,
                     'vm_vehicle_id' => $vm_vehicle_id
-                ]
-            ];
+                )
+            );
 
 
             $this->VmVehicleFile->create();
-            if ($this->VmVehicleFile->save($vm_vehicle_file)) {
+            if ($vm_vehicle_file = $this->VmVehicleFile->save($vm_vehicle_file)) {
+                $this->VmChangeLog->saveVmVehicleLog($this->VmVehicleFile, $vm_vehicle_file['VmVehicleFile']['vm_vehicle_id'], $this->Session, $this->Auth);
+    
                 move_uploaded_file($file['tmp_name'], '../webroot/img/vehicle_files/' . $new_name);
                 $this->Session->setFlash('Uspesno ste dodali dokument "' . $vm_vehicle_file['VmVehicleFile']['title'] . '".', 'flash_success');
                 if (
@@ -167,9 +165,9 @@ class VmVehicleFilesController extends AppController
     public function view($vm_vehicle_file_id = null)
     {
         $vm_vehicle_file =  $this->VmVehicleFile->findById($vm_vehicle_file_id);
-        if (!$vm_vehicle_file_id || empty($vm_vehicle_file)) {
-            $this->Session->setFlash('Nema fajla sa izabranim ID-jem', 'flash_error');
-            $this->redirect($this->referer());
+        if (!file_exists(WWW_ROOT . 'img' . DS . $vm_vehicle_file['VmVehicleFile']['path'])) {
+            $this->Session->setFlash('Traženi fajl nije pronađen u folderu', 'flash_error');
+            return $this->redirect(array('action'=>'index'));
         } else {
             $this->set('vm_vehicle_file', $vm_vehicle_file);
         }
@@ -181,23 +179,19 @@ class VmVehicleFilesController extends AppController
             throw new MethodNotAllowedException();
         }
         $vm_vehicle_file = $this->VmVehicleFile->findById($vm_vehicle_file_id);
-        if (!$vm_vehicle_file) {
-            $this->Session->setFlash('Nema izabranog fajla', 'flash_error');
-        } else {
 
-            if ($this->VmVehicleFile->delete($vm_vehicle_file_id)) {
-                if (file_exists(WWW_ROOT . 'img' . DS . $vm_vehicle_file['VmVehicleFile']['path'])) {
-                    unlink(WWW_ROOT . 'img' . DS . $vm_vehicle_file['VmVehicleFile']['path']);
-
-                    $this->Session->setFlash('Uspesno ste obrisali fajl', 'flash_success');
-                } else {
-                    $this->Session->setFlash('Nije pronadjen fajl u direktorijumu', 'flash_error');
-                }
-            } else {
-                $this->Session->setFlash('Greska sa bazom podataka', 'flash_error');
+        if ($this->VmVehicleFile->delete($vm_vehicle_file_id)) {
+            $this->VmChangeLog->saveVmVehicleLog($this->VmVehicleFile, $vm_vehicle_file['VmVehicleFile']['vm_vehicle_id'], $this->Session, $this->Auth);
+    
+            if (file_exists(WWW_ROOT . 'img' . DS . $vm_vehicle_file['VmVehicleFile']['path'])) {
+                unlink(WWW_ROOT . 'img' . DS . $vm_vehicle_file['VmVehicleFile']['path']);
             }
+            $this->Session->setFlash('Uspesno ste izbrisali fajl vozila', 'flash_success');
+        } else {
+            $this->Session->setFlash('Greska sa bazom podataka', 'flash_error');
         }
-        $this->redirect($this->referer());
+
+        $this->redirect(array('action' => 'index'));
     }
 
 

@@ -59,7 +59,7 @@ class VmVehicle extends AppModel
 				'rule' => 'date',
 				'message' => 'Niste pravilno uneli datum',
 				'allowEmpty' => true,
-				
+
 			),
 			'from_to' => array(
 				'rule' => 'from_to_custom',
@@ -91,7 +91,7 @@ class VmVehicle extends AppModel
 				'rule' => array('naturalNumber'),
 				'message' => 'Niste uneli godinu proizvodnje'
 			),
-			
+
 		),
 		'color' => array(
 			'notempty' => array(
@@ -145,22 +145,23 @@ class VmVehicle extends AppModel
 				'message' => 'Niste pravilno uneli cenu'
 			),
 		),
-		'hr_worker_id'=> array(
+		'hr_worker_id' => array(
 			'noSelected' => array(
-				'rule'=> 'multi_custom',
-				'message'=>'Izaberite radnika koji koristi ovo vozilo ili...'
+				'rule' => 'multi_custom',
+				'message' => 'Izaberite radnika koji koristi ovo vozilo ili...'
 			)
 		),
-		'vm_external_worker_id'=> array(
+		'vm_external_worker_id' => array(
 			'noSelected' => array(
-				'rule'=> 'multi_custom',
-				'message'=>'...eksternog radnika'
+				'rule' => 'multi_custom',
+				'message' => '...eksternog radnika'
 			)
 		),
 	);
 
-	public function multi_custom($a, $b){
-		if(empty($this->data['VmInternalWorkerVehicle']['hr_worker_id']) && empty($this->data['VmExternalWorkerVehicle']['vm_external_worker_id'])){
+	public function multi_custom($a, $b)
+	{
+		if (empty($this->data['VmInternalWorkerVehicle']['hr_worker_id']) && empty($this->data['VmExternalWorkerVehicle']['vm_external_worker_id'])) {
 			return false;
 		}
 		return true;
@@ -241,21 +242,6 @@ class VmVehicle extends AppModel
 			'finderQuery' => '',
 			'counterQuery' => ''
 		),
-		/*'VmExternalWorkerVehicle' => array(
-			'className' => 'VmExternalWorkerVehicle',
-			'foreignKey' => 'vm_vehicle_id',
-			'dependent' => false,
-			'conditions' => '',
-			'fields' => '',
-			'order' => '',
-			'limit' => '',
-			'offset' => '',
-			'exclusive' => '',
-			'finderQuery' => '',
-			'counterQuery' => ''
-		),*/
-
-
 		'VmFuel' => array(
 			'className' => 'VmFuel',
 			'foreignKey' => 'vm_vehicle_id',
@@ -350,4 +336,121 @@ class VmVehicle extends AppModel
 			'counterQuery' => ''
 		),
 	);
+
+	private $vm_vehicle;
+	public function beforeDelete($cascade = true)
+	{
+		$this->vm_vehicle = $this->findById($this->id);
+	}
+	public function afterDelete()
+	{
+		//registrations
+		$this->VmRegistration = ClassRegistry::init('VmRegistration');
+		$vm_registrations = $this->VmRegistration->findAllByVmVehicleId($this->id);
+
+
+		$this->VmRegistrationFile = ClassRegistry::init('VmRegistrationFile');
+		foreach ($vm_registrations as $vm_registration) {
+			$conditions = array('VmRegistrationFile.vm_registration_id' => $vm_registration['VmRegistration']['id']);
+
+			foreach($this->VmRegistrationFile->findAllByVmRegistrationId($vm_registration['VmRegistration']['id']) as $vm_registration_file){
+				if (file_exists(WWW_ROOT . 'img' . DS . $vm_registration_file['VmRegistrationFile']['path'])) {
+					unlink(WWW_ROOT . 'img' . DS . $vm_registration_file['VmRegistrationFile']['path']);
+				}
+			}
+			$this->VmRegistrationFile->deleteAll(
+				$conditions
+			);
+		}
+
+		//damages
+		$this->VmDamage = ClassRegistry::init('VmDamage');
+		$vm_damages = $this->VmDamage->findAllByVmVehicleId($this->id);
+
+
+		$this->VmRepair = ClassRegistry::init('VmRepair');
+		foreach ($vm_damages as $vm_damage) {
+			$conditions = array('VmRepair.vm_damage_id' => $vm_damage['VmDamage']['id']);
+
+			$this->VmRepair->deleteAll(
+				$conditions
+			);
+		}
+
+		$conditions = array('VmRegistration.vm_vehicle_id' => $this->vm_vehicle['VmVehicle']['id']);
+
+		$this->VmRegistration->deleteAll(
+			$conditions
+		);
+		$conditions = array('VmDamage.vm_vehicle_id' => $this->vm_vehicle['VmVehicle']['id']);
+
+		$this->VmDamage->deleteAll(
+			$conditions
+		);
+
+
+
+
+
+		$this->VmFuel = ClassRegistry::init('VmFuel');
+		$conditions = array('VmFuel.vm_vehicle_id' => $this->vm_vehicle['VmVehicle']['id']);
+
+		$this->VmFuel->deleteAll(
+			$conditions
+		);
+
+		$this->VmCrossedKm = ClassRegistry::init('VmCrossedKm');
+		$conditions = array('VmCrossedKm.vm_vehicle_id' => $this->vm_vehicle['VmVehicle']['id']);
+
+		$this->VmCrossedKm->deleteAll(
+			$conditions
+		);
+
+		$this->VmMaintenance = ClassRegistry::init('VmMaintenance');
+		$conditions = array('VmMaintenance.vm_vehicle_id' => $this->vm_vehicle['VmVehicle']['id']);
+
+		$this->VmMaintenance->deleteAll(
+			$conditions
+		);
+
+
+		$this->VmVehicleFile = ClassRegistry::init('VmVehicleFile');
+		$conditions = array('VmVehicleFile.vm_vehicle_id' => $this->vm_vehicle['VmVehicle']['id']);
+
+		foreach($this->VmVehicleFile->findAllByVmVehicleId($this->vm_vehicle['VmVehicle']['id']) as $vm_vehicle_file){
+			if (file_exists(WWW_ROOT . 'img' . DS . $vm_vehicle_file['VmVehicleFile']['path'])) {
+                unlink(WWW_ROOT . 'img' . DS . $vm_vehicle_file['VmVehicleFile']['path']);
+            }
+		}
+		$this->VmVehicleFile->deleteAll(
+			$conditions
+		);
+
+		$this->VmImage = ClassRegistry::init('VmImage');
+		$conditions = array('VmImage.vm_vehicle_id' => $this->vm_vehicle['VmVehicle']['id']);
+
+		foreach($this->VmImage->findAllByVmVehicleId($this->vm_vehicle['VmVehicle']['id']) as $vm_image){
+			if (file_exists(WWW_ROOT . 'img' . DS . $vm_image['VmImage']['path'])) {
+                unlink(WWW_ROOT . 'img' . DS . $vm_image['VmImage']['path']);
+            }
+		}
+		$this->VmImage->deleteAll(
+			$conditions
+		);
+
+		$this->VmExternalWorkerVehicle = ClassRegistry::init('VmExternalWorkerVehicle');
+		$conditions = array('VmExternalWorkerVehicle.vm_vehicle_id' => $this->vm_vehicle['VmVehicle']['id']);
+
+		$this->VmExternalWorkerVehicle->deleteAll(
+			$conditions
+		);
+
+		$this->VmInternalWorkerVehicle = ClassRegistry::init('VmInternalWorkerVehicle');
+		$conditions = array('VmInternalWorkerVehicle.vm_vehicle_id' => $this->vm_vehicle['VmVehicle']['id']);
+
+		$this->VmInternalWorkerVehicle->deleteAll(
+			$conditions
+		);
+
+	}
 }

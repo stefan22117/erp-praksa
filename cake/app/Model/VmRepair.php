@@ -85,4 +85,22 @@ class VmRepair extends AppModel
 			)
 		),
 	);
+
+
+
+	public $vm_repair;
+	public function beforeDelete($cascade = true)
+	{
+		$this->vm_repair = $this->findById($this->id);
+	}
+	public function afterDelete()
+	{
+		$this->VmCrossedKm = ClassRegistry::init('VmCrossedKm');
+
+		$conditions = array('VmCrossedKm.id'=> $this->vm_repair['VmRepair']['vm_crossed_km_id']);
+
+		$this->VmCrossedKm->deleteAll(
+			$conditions
+		);
+	}
 }

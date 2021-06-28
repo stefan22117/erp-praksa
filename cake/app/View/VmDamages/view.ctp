@@ -108,7 +108,7 @@
 
 <div class="content_data" id="addNewRepairForm" <?php echo isset($errors['Repairs']) ? 'style="display: block"' : 'style="display: none"' ?>>
     <div class="formular">
-        <?php echo $this->Form->create('VmRepair', array('novalidate' => true, 'url' => array('controller' => 'vmRepairs', 'action' => 'add', $vm_damage['VmDamage']['id']))); ?>
+        <?php echo $this->Form->create('VmRepair', array('novalidate' => true, 'url' => array('controller' => 'vmRepairs', 'action' => 'save'))); ?>
         <?php echo $this->Form->hidden('VmCrossedKm.vm_vehicle_id', ['value' => $vm_damage['VmVehicle']['id']]); ?>
         <?php echo $this->Form->hidden('VmRepair.vm_damage_id', ['value' => $vm_damage['VmDamage']['id']]); ?>
 

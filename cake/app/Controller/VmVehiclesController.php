@@ -5,9 +5,12 @@ class VmVehiclesController  extends AppController
 {
 
 
+
+
 	public function beforeFilter()
 	{
-		$this->Auth->allow('index', 'add', 'view', 'edit', 'delete', 'save');
+		parent::beforeFilter();
+		$this->Auth->allow('index', 'view', 'save', 'delete');
 
 		if (
 			strtolower($this->request['action']) == 'view' ||
@@ -21,13 +24,10 @@ class VmVehiclesController  extends AppController
 					$this->Session->setFlash(__('Traženo vozilo nije pronađeno'), 'flash_error');
 					return $this->redirect(array('controller' => 'vmVehicles', 'action' => 'index'));
 				}
-			}
-			else if(strtolower($this->request['action']) != 'save')
-			{
+			} else if (strtolower($this->request['action']) != 'save') {
 				$this->Session->setFlash(__('Niste prosledili id vozila'), 'flash_error');
 				return $this->redirect(array('controller' => 'vmVehicles', 'action' => 'index'));
 			}
-
 		}
 	}
 
@@ -36,12 +36,11 @@ class VmVehiclesController  extends AppController
 	public $uses = array(
 		'VmVehicle',
 		'VmRegistration',
-		'VmChangeLog',
-		'VmCrossedKm',
 		'VmFuel',
 		'VmRepair',
 		'VmMaintenance',
 		'VmDamage',
+		'VmCrossedKm',
 		'VmVehicleFile',
 		'HrWorker',
 		'VmExternalWorker',
@@ -59,7 +58,6 @@ class VmVehiclesController  extends AppController
 		$this->set('hr_workers', $this->HrWorker->find('list', array(
 			'fields' => array('HrWorker.id', 'HrWorker.first_name')
 		)));
-
 
 
 
@@ -132,7 +130,6 @@ class VmVehiclesController  extends AppController
 		$options = array(
 			'conditions' => $conditions,
 			'joins' => $joins,
-			'contain' => array('Aco', 'ErpKickstartIcon'), //???
 			'order' => 'VmVehicle.created DESC',
 			'recursive' => 2,
 			'limit' => 5,
@@ -220,14 +217,12 @@ class VmVehiclesController  extends AppController
 			$this->request->data['VmVehicle']['vm_external_worker_id'] =
 				$this->request->data['VmExternalWorkerVehicle']['vm_external_worker_id'];
 			$this->request->data['VmVehicle']['reg_number'] = strtoupper($this->request->data['VmVehicle']['reg_number']);
+
 			if ($vm_vehicle = $this->VmVehicle->save($this->request->data)) {
 
+				$this->VmChangeLog->saveVmVehicleLog($this->VmVehicle, $vm_vehicle['VmVehicle']['id'], $this->Session, $this->Auth);
 
 				//niz
-
-
-
-
 				$this->VmInternalWorkerVehicle->deleteAll(array('vm_vehicle_id' => $vm_vehicle['VmVehicle']['id']));
 				if (!empty($this->request->data['VmInternalWorkerVehicle']['hr_worker_id'])) {
 					foreach ($this->request->data['VmInternalWorkerVehicle']['hr_worker_id'] as $hr_id) {
@@ -257,16 +252,7 @@ class VmVehiclesController  extends AppController
 						$this->VmExternalWorkerVehicle->save($vm_external_worker_vehicle);
 					}
 				}
-
-
-
-
 				//niz
-
-
-
-
-
 
 
 				$this->Session->setFlash($success, 'flash_success');
@@ -328,43 +314,11 @@ class VmVehiclesController  extends AppController
 		}
 
 
-
-
 		$this->set('errors', $errors);
 		$this->Session->delete('errors');
 
 
 		//getting errors end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 		//vehicle
 		$vm_vehicle = $this->VmVehicle->find('first', array(
@@ -432,8 +386,6 @@ class VmVehiclesController  extends AppController
 		$this->set('vm_maintenances', $vm_maintenances);
 
 
-
-
 		$vm_max_crossed_km = $this->VmCrossedKm->findAllByVmVehicleId(
 			$vm_vehicle_id,
 			'total_kilometers',
@@ -479,66 +431,13 @@ class VmVehiclesController  extends AppController
 		$this->set('vm_companies', $vm_companies);
 	}
 
-	public function add()
-	{
-
-		if ($this->request->is('post')) {
-
-			$this->request->data['VmVehicle']['active_from'] = $this->data['VmVehicle']['active_from']['year'] . '-' .
-				$this->data['VmVehicle']['active_from']['month'] . '-' . $this->data['VmVehicle']['active_from']['day'];
-
-			$this->request->data['VmVehicle']['active_to'] = $this->data['VmVehicle']['active_to']['year'] . '-' .
-				$this->data['VmVehicle']['active_to']['month'] . '-' . $this->data['VmVehicle']['active_to']['day'];
-
-
-			if ($this->VmVehicle->save($this->request->data)) {
-				$this->Session->setFlash('Uspesno ste dodali vozilo', 'flash_success');
-				$this->redirect(['action' => 'index']);
-			}
-		}
-	}
-
-	public function edit($vm_vehicle_id = null)
-	{
-		$this->VmVehicle->id = $vm_vehicle_id;
-
-		$vm_vehicle = $this->VmVehicle->findById($vm_vehicle_id);
-
-
-
-
-		if ($this->request->is(['post', 'put'])) {
-
-			$this->request->data['VmVehicle']['active_from'] = $this->data['VmVehicle']['active_from']['year'] . '-' .
-				$this->data['VmVehicle']['active_from']['month'] . '-' . $this->data['VmVehicle']['active_from']['day'];
-
-			$this->request->data['VmVehicle']['active_to'] = $this->data['VmVehicle']['active_to']['year'] . '-' .
-				$this->data['VmVehicle']['active_to']['month'] . '-' . $this->data['VmVehicle']['active_to']['day'];
-
-
-
-			if ($this->VmVehicle->save($this->request->data)) {
-				$this->Session->setFlash('Uspesno ste sacuvali vozilo', 'flash_success');
-				return $this->redirect(array('action' => 'index'));
-			} else {
-				$this->Session->setFlash('Doslo je do greske!', 'flash_error');
-				return $this->redirect($this->referer());
-			}
-		}
-
-
-
-
-		if (!$this->request->data) {
-			$this->request->data = $vm_vehicle;
-		}
-	}
 
 	public function delete($vm_vehicle_id = null)
 	{
 
 		if ($this->request->is('post')) {
 			if ($this->VmVehicle->delete($vm_vehicle_id)) {
+				$this->VmChangeLog->saveVmVehicleLog($this->VmVehicle, 0, $this->Session, $this->Auth);
 				$this->Session->setFlash('Uspešno ste izbrisali vozilo', 'flash_success');
 			} else {
 				$this->Session->setFlash('Došlo je do greške pri brisanju vozila', 'flash_error');

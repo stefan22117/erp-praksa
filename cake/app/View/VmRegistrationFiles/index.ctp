@@ -1,6 +1,6 @@
 <ul class="breadcrumbs">
     <li><?php echo $this->Html->link(__('Početna'), array('controller' => 'pages', 'action' => 'display')); ?></li>
-    <li class="last"><a href="" onclick="return false"><?php echo __('Fajlovi'); ?></a></li>
+    <li class="last"><a href="" onclick="return false"><?php echo __('Registracioni fajlovi'); ?></a></li>
 </ul>
 <div id='alert'><?php echo $this->Session->flash(); ?></div>
 
@@ -12,7 +12,7 @@
     <div style="float:right; margin:20px 24px 0 0;">
         <ul class="button-bar">
             <li class="first">
-                <?php echo $this->Html->link('<i class="icon-plus-sign" style="color :#669E00"></i> ' . __('Dodaj novi registracioni fajl'), array('action' => 'save'), array('escape' => false)); ?>
+                <?php echo $this->Html->link('<i class="icon-plus-sign" style="color :#669E00"></i> ' . __('Dodaj novi registracioni fajl'), array('action' => 'add'), array('escape' => false)); ?>
             </li>
         </ul>
     </div>
@@ -74,15 +74,18 @@
                     <tr>
                         <td><?php echo $vm_registration_file['VmRegistrationFile']['title']; ?></td>
                         <td><?php echo $vm_registration_file['VmRegistrationFile']['created']; ?></td>
-                        <td><?php echo $this->Html->link(
-                                $vm_registration_file['VmRegistration']['VmVehicle']['brand_and_model'],
-                                array('controller' => 'vmVehicles', 'action' => 'view', $vm_registration_file['VmRegistration']['VmVehicle']['id'])
-                            );
+                        <td><?php echo
+                            !empty($vm_registration_file['VmRegistration']['VmVehicle']['brand_and_model']) &&
+                                !empty($vm_registration_file['VmRegistration']['VmVehicle']['id']) ?
+                                $this->Html->link(
+                                    $vm_registration_file['VmRegistration']['VmVehicle']['brand_and_model'],
+                                    array('controller' => 'vmVehicles', 'action' => 'view', $vm_registration_file['VmRegistration']['VmVehicle']['id'])
+                                ) : null;
                             ?>
                         </td>
 
                         <td>
-                        <ul class="button-bar">
+                            <ul class="button-bar">
                                 <li class="first">
                                     <?php echo $this->Html->link(
                                         '<i class="icon-eye-open" style="color :blue"></i>',
@@ -223,7 +226,11 @@
 
 
 
-<hr><hr><hr><hr><hr>
+<hr>
+<hr>
+<hr>
+<hr>
+<hr>
 
 
 

@@ -155,9 +155,7 @@
 
             <thead>
                 <th><?php echo __('Cena održavanja'); ?></th>
-                <th><?php echo __('Utrošeno vreme'); ?></th>
                 <th><?php echo __('Opis održavanja'); ?></th>
-                <th><?php echo __('Vreme održavanja'); ?></th>
                 <th><?php echo __('Radnik'); ?></th>
                 <th><?php echo __('Firma'); ?></th>
                 <th></th>
@@ -166,20 +164,7 @@
                 <?php foreach ($vm_maintenances as $vm_maintenance) : ?>
                     <tr>
                         <td><?php echo $vm_maintenance['VmMaintenance']['amount']; ?></td>
-                        <td>
-
-                            <?php
-                            $spent_time = $vm_maintenance['VmMaintenance']['spent_time'];
-                            $m = floor(($spent_time % 3600) / 60);
-                            $h = floor(($spent_time % 86400) / 3600);
-                            $d = floor($spent_time / 86400);
-
-                            $spent_time = '';
-                            $d ? $spent_time = ($d == 1 ?  __(' dan i ') : $d . __(' dana i ')) : null;
-                            $spent_time .= $h . ':' . $m;
-                            echo $spent_time;
-                            ?>
-                        </td>
+                     
                         <td>
                             <?php echo strlen($vm_maintenance['VmMaintenance']['description']) < 15 ?
                                 $vm_maintenance['VmMaintenance']['description'] :
@@ -189,16 +174,17 @@
 
 
 
-                        <td><?php echo $vm_maintenance['VmCrossedKm']['report_datetime']; ?></td>
-                        <td><?php echo $vm_maintenance['VmCrossedKm']['HrWorker']['first_name']; ?></td>
+                        <td><?php echo !empty($vm_maintenance['VmCrossedKm']['HrWorker']['first_name']) ?
+                        $vm_maintenance['VmCrossedKm']['HrWorker']['first_name']
+                        : null; ?></td>
 
                         <td>
                             <?php echo $this->Html->link(
-                                $vm_maintenance['VmCompany']['name'],
+                                $vm_maintenance['VmVehicle']['brand_and_model'],
                                 array(
-                                    'controller' => 'vmCompanies',
+                                    'controller' => 'vmVehicles',
                                     'action' => 'view',
-                                    $vm_maintenance['VmCompany']['id']
+                                    $vm_maintenance['VmVehicle']['id']
                                 )
                             ); ?>
                         </td>

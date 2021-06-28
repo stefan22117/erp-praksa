@@ -70,4 +70,21 @@ class VmFuel extends AppModel
 		),
 
 	);
+
+
+	public $vm_fuel;
+	public function beforeDelete($cascade = true)
+	{
+		$this->vm_fuel = $this->findById($this->id);
+	}
+	public function afterDelete()
+	{
+		$this->VmCrossedKm = ClassRegistry::init('VmCrossedKm');
+
+		$conditions = array('VmCrossedKm.id'=> $this->vm_fuel['VmFuel']['vm_crossed_km_id']);
+
+		$this->VmCrossedKm->deleteAll(
+			$conditions
+		);
+	}
 }

@@ -205,4 +205,9 @@
     $('#VmCrossedKmHrWorkerIdVmRepair').select2({}); 
     $('#VmMaintenanceVmVehicleId').select2({});
     $('#VmCrossedKmHrWorkerIdVmMaintenance').select2({}); 
+
+    $('input[type="date"]').datepicker({
+        changeYear: true,
+        changeMonth: true
+    });
 </script>

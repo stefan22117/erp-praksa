@@ -1,6 +1,6 @@
 <ul class="breadcrumbs">
     <li><?php echo $this->Html->link(__('Početna'), array('controller' => 'pages', 'action' => 'display')); ?></li>
-    <li class="last"><a href="" onclick="return false"><?php echo __('Fajlovi'); ?></a></li>
+    <li class="last"><a href="" onclick="return false"><?php echo __('Fajlovi vozila'); ?></a></li>
 </ul>
 <div id='alert'><?php echo $this->Session->flash(); ?></div>
 
@@ -12,7 +12,7 @@
     <div style="float:right; margin:20px 24px 0 0;">
         <ul class="button-bar">
             <li class="first">
-                <?php echo $this->Html->link('<i class="icon-plus-sign" style="color :#669E00"></i> ' . __('Dodaj novi fajl'), array('action' => 'save'), array('escape' => false)); ?>
+                <?php echo $this->Html->link('<i class="icon-plus-sign" style="color :#669E00"></i> ' . __('Dodaj novi fajl'), array('action' => 'add'), array('escape' => false)); ?>
             </li>
         </ul>
     </div>

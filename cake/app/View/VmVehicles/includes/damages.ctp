@@ -133,7 +133,7 @@
                                 </li>
 
                                 <li class="last">
-                                    <?php echo $this->Html->link('<i class="icon-trash" style="color:red"></i>', array('controller' => 'vmDamages', 'action' => 'delete', $vm_damage['VmDamage']['id']), array('title' => __('Brisanje'), 'escape' => false)); ?>
+                                    <?php echo $this->Form->postLink('<i class="icon-trash" style="color:red"></i>', array('controller' => 'vmDamages', 'action' => 'delete', $vm_damage['VmDamage']['id']), array('title' => __('Brisanje'), 'escape' => false, 'confirm' => 'Da li ste sigurni da želite da izbrišete štetu?')); ?>
                                 </li>
 
                             </ul>

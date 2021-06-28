@@ -10,7 +10,23 @@
 
 <div style="float:right; margin:20px 24px 0 0;">
     <ul class="button-bar">
-        <li class="first">
+    <li class="first">
+            <?php
+            echo $this->Html->link(
+                '<i class="icon-picture" style="color:aqua;"></i> <i class="icon-truck" style="color:black;"></i> ' . __('Galerija'),
+                array(
+                    'controller'=>'VmImages',
+                    'action' => 'galery',
+                    $vm_vehicle['VmVehicle']['id']
+                ),
+                array(
+                    'escape' => false,
+                    'style' => ' font-size: 12px;'
+                )
+            );
+            ?>
+        </li>
+        <li>
             <?php
             echo $this->Html->link(
                 '<i class="icon-edit" style="color:orange;"></i> ' . __('Izmena'),
@@ -327,4 +343,9 @@
         $('#addNewMaintenanceForm').hide();
         $('#addNewMaintenance').show();
     })
+
+    $('input[type="date"]').datepicker({
+        changeYear: true,
+        changeMonth: true
+    });
 </script>

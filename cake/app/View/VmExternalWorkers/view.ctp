@@ -13,22 +13,41 @@
 
 <div style="float:right; margin:20px 24px 0 0;">
     <ul class="button-bar">
-        <li class="first">
-            <?php
-            echo $this->Html->link(
-                '<i class="icon-eye-open" style="color:blue;"></i> <i class="icon-building" style="color:green;"></i>' . __('Firma'),
-                array(
-                    'controller'=>'vmCompanies',
-                    'action' => 'view',
-                    $vm_external_worker['VmCompany']['id']
-                ),
-                array(
-                    'escape' => false,
-                    'style' => ' font-size: 12px;'
-                )
-            );
-            ?>
-        </li>
+
+        <?php if (!empty($vm_external_worker['VmExternalWorker']['vm_company_id'])) : ?>
+
+            <li class="first">
+                <?php
+                echo $this->Html->link(
+                    '<i class="icon-eye-open" style="color:blue;"></i> <i class="icon-building" style="color:green;"></i>' . __('Firma'),
+                    array(
+                        'controller' => 'vmCompanies',
+                        'action' => 'view',
+                        $vm_external_worker['VmCompany']['id']
+                    ),
+                    array(
+                        'escape' => false,
+                        'style' => ' font-size: 12px;'
+                    )
+                );
+                ?>
+            </li>
+        <?php else : ?>
+            <li class="first">
+                <?php
+                echo $this->Html->link(
+                    '<i class="icon-eye-close" style="color:lightblue;"></i> <i class="icon-building" style="color:lightgreen;"></i>' . __('Nezaposlen'),
+                    'javascript:void(0);',
+                    array(
+                        'escape' => false,
+                        'style' => ' font-size: 12px;'
+                    )
+                );
+                ?>
+            </li>
+
+        <?php endif; ?>
+
         <li>
             <?php
             echo $this->Html->link(
@@ -89,9 +108,24 @@
             <th style="text-align:left"><?php echo __('E-mail'); ?></th>
             <td><?php echo $vm_external_worker['VmExternalWorker']['email']; ?></td>
         </tr>
-        <tr>
-            <th style="text-align:left"><?php echo __('Firma'); ?></th>
-            <td><?php echo $vm_external_worker['VmCompany']['name']; ?></td>
-        </tr>
+        <?php if (!empty($vm_external_worker['VmExternalWorker']['vm_company_id'])) : ?>
+
+            <tr>
+                <th style="text-align:left"><?php echo __('Radni odnos'); ?></th>
+                
+                <td style="background-color:#eeffee;"><?php echo __('Zaposlen') ?></td>
+            </tr>
+
+            <tr>
+                <th style="text-align:left"><?php echo __('Firma'); ?></th>
+                <td><?php echo $vm_external_worker['VmCompany']['name']; ?></td>
+            </tr>
+        <?php else : ?>
+
+            <tr>
+                <th style="text-align:left"><?php echo __('Radni odnos'); ?></th>
+                <td style="background-color:#feffee;"><?php echo __('Nezaposlen') ?></td>
+            </tr>
+        <?php endif; ?>
     </table>
 </div>

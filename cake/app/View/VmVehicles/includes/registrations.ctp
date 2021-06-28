@@ -186,7 +186,7 @@
                             echo $this->Html->link(
                                 $vm_registration['VmCompany']['name'],
                                 array(
-                                    'controller' => 'VmCompanies',
+                                    'controller' => 'vmCompanies',
                                     'action' => 'view',
                                     $vm_registration['VmCompany']['id']
                                 )
@@ -201,7 +201,11 @@
                                     <?php
                                     echo $this->Html->link(
                                         '<i class="icon-eye-open" style="color:blue;"></i>',
-                                        array('action' => 'view', $vm_registration['VmRegistration']['id']),
+                                        array(
+                                            'controller' => 'vmRegistrations',
+                                            'action' => 'view',
+                                            $vm_registration['VmRegistration']['id']
+                                        ),
                                         array('escape' => false, 'title' => __('Detalji'))
                                     );
                                     ?>
@@ -210,16 +214,24 @@
                                     <?php
                                     echo $this->Html->link(
                                         '<i class="icon-edit" style="color:orange;"></i>',
-                                        array('action' => 'save', $vm_registration['VmRegistration']['id']),
+                                        array(
+                                            'controller' => 'vmRegistrations',
+                                            'action' => 'save',
+                                            $vm_registration['VmRegistration']['id']
+                                        ),
                                         array('escape' => false, 'title' => __('Izmena'))
                                     );
                                     ?>
                                 </li>
                                 <li class="last">
                                     <?php
-                                    echo $this->Html->link(
+                                    echo $this->Form->postLink(
                                         '<i class="icon-trash" style="color:red;"></i>',
-                                        array('action' => 'delete', $vm_registration['VmRegistration']['id']),
+                                        array(
+                                            'controller' => 'vmRegistrations',
+                                            'action' => 'delete',
+                                            $vm_registration['VmRegistration']['id']
+                                        ),
                                         array('escape' => false, 'title' => __('Brisanje'), 'confirm' => 'Da li ste sigurni da želite da izbrišete registraciju?')
                                     );
                                     ?>

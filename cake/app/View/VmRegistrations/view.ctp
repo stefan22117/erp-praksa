@@ -51,7 +51,7 @@
                 '<i class="icon-edit" style="color:orange;"></i> ' . __('Izmena'),
                 array(
                     'action' => 'save',
-                    $vm_registration['VmVehicle']['id']
+                    $vm_registration['VmRegistration']['id']
                 ),
                 array(
                     'escape' => false,
@@ -66,7 +66,7 @@
                 '<i class="icon-trash" style="color:red;"></i> ' . __('Brisanje'),
                 array(
                     'action' => 'delete',
-                    $vm_registration['VmVehicle']['id']
+                    $vm_registration['VmRegistration']['id']
                 ),
                 array(
                     'escape' => false,
@@ -141,6 +141,8 @@
 
         <div class="formular">
             <?php echo $this->Form->create('VmRegistrationFile', array('type' => 'file', 'url' => array('controller' => 'vmRegistrationFiles', 'action' => 'add', $vm_registration['VmRegistration']['id']))); ?>
+            <?php echo $this->Form->hidden('vm_registration_id', array('value' => $vm_registration['VmRegistration']['id'])); ?>
+
             <div class="col_9">
                 <?php echo $this->Form->label('VmRegistrationFile.title', __('Naslov fajla')); ?>
                 <?php echo $this->Form->input('VmRegistrationFile.title', array('type' => 'text', 'label' => false, 'style' => 'margin: 0; width: 100%;', 'required' => false, 'placeholder' => __('Unesite naslov fajla'))); ?>
@@ -182,7 +184,7 @@
 
     </div>
 
-</div>
+
 
 
 <?php if (empty($vm_registration['VmRegistrationFile'])) : ?>
@@ -284,7 +286,7 @@
 
 <?php endif; ?>
 
-
+</div>
 
 
 

@@ -10,15 +10,15 @@
 
         <?php if ($action == 'add') : ?>
             <h3>
-            <i class="icon-truck" style="color:black;"></i>
-                <i class="icon-save"></i>
+                <i class="icon-truck" style="color:black;"></i>
+                <i class="icon-save" style="color:blue;"></i>
                 <?php echo __('Dodavanje novog vozila'); ?>
             </h3>
         <?php endif; ?>
         <?php if ($action == 'edit') : ?>
             <h3>
-            <i class="icon-truck" style="color:black;"></i>
-                <i class="icon-edit"></i>
+                <i class="icon-truck" style="color:black;"></i>
+                <i class="icon-edit" style="color:orange;"></i>
                 <?php echo __('Izmena postojećeg vozila'); ?>
             </h3>
         <?php endif; ?>
@@ -184,7 +184,7 @@
             <?php echo $this->Form->label('VmInternalWorkerVehicle.hr_worker_id', __('Zaposleni'));
             echo $this->Form->input('VmInternalWorkerVehicle.hr_worker_id', array(
                 'type' => 'select', 'options' => $hr_workers,
-                'id' => 'radnikId', 'error' => false, 'label' => false,
+                'error' => false, 'label' => false,
                 'multiple' => true,
                 'style' => 'width:100%;',
                 'default' => $action == 'edit' ? $vm_hr_array : 0
@@ -206,7 +206,7 @@
             echo $this->Form->label('VmExternalWorkerVehicle.vm_external_worker_id', __('Eksterni radnici'));
             echo $this->Form->input('VmExternalWorkerVehicle.vm_external_worker_id', array(
                 'type' => 'select', 'options' => $vm_external_workers,
-                'id' => 'radnikEksterniId', 'error' => false, 'label' => false,
+                'error' => false, 'label' => false,
                 'multiple' => true,
                 'style' => 'width:100%;',
                 'default' => $action == 'edit' ? $vm_ext_array : 0
@@ -233,19 +233,6 @@
             </ul>
         </div>
         <div class="clear"></div>
-
-        <script>
-            $('#radnikId').select2();
-            $('#radnikEksterniId').select2();
-            // $("option:selected").prop("selected", false)
-            // $('select').select2('val', ['1', '3'])
-        </script>
-
-
-
-
-
-
 
         <?php
         if ($action == 'edit') {
@@ -287,4 +274,6 @@
         changeYear: true,
         changeMonth: true
     });
+    $('#VmInternalWorkerVehicleHrWorkerId').select2();
+    $('#VmExternalWorkerVehicleVmExternalWorkerId').select2();
 </script>

@@ -83,7 +83,7 @@
 
         <div class="col_9">
             <?php echo $this->Form->label('VmFuel.liters', __('Gorivo u litrima')); ?>
-            <?php echo $this->Form->input('VmFuel.liters', array('type' => 'text', 'label' => false, 'style' => 'margin: 0; width: 100%;', 'required' => false, 'placeholder' => __('Unesite gorivo u litrima'))); ?>
+            <?php echo $this->Form->input('VmFuel.liters', array('type' => 'number', 'label' => false, 'style' => 'margin: 0; width: 100%;', 'required' => false, 'placeholder' => __('Unesite gorivo u litrima'))); ?>
         </div>
         <div class="col_9">
             <?php echo $this->Form->label('VmFuel.amount', __('Ukupna cena goriva')); ?>
@@ -91,7 +91,7 @@
         </div>
         <div class="col_9">
             <?php echo $this->Form->label('VmCrossedKm.total_kilometers', __('Trenutna kilometraža')); ?>
-            <?php echo $this->Form->input('VmCrossedKm.total_kilometers', array('type' => 'text', 'label' => false, 'style' => 'margin: 0; width: 100%;', 'required' => false, 'placeholder' => __('Unesite gorivo u litrima'))); ?>
+            <?php echo $this->Form->input('VmCrossedKm.total_kilometers', array('type' => 'number', 'label' => false, 'style' => 'margin: 0; width: 100%;', 'required' => false, 'placeholder' => __('Unesite gorivo u litrima'))); ?>
         </div>
 
 

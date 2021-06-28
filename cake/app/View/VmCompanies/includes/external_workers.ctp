@@ -18,9 +18,9 @@
     <div id="addNewExternalWorkerForm" <?php echo isset($errors['ExternalWorkers']) ? 'style="display: block"' : 'style="display: none"'; ?>>
 
         <div class="formular">
-            <?php echo $this->Form->create('ExternalWorker', array('novalidate' => 'true', 'url' => array('controller' => 'vmExternalWorkers', 'action' => 'save'))); ?>
+            <?php echo $this->Form->create('VmExternalWorker', array('novalidate' => 'true', 'url' => array('controller' => 'vmExternalWorkers', 'action' => 'save'))); ?>
 
-            <?php echo $this->Form->hidden('vm_company_id', array('value' => $vm_company['VmCompany']['id'])); ?>
+            <?php echo $this->Form->hidden('VmExternalWorker.vm_company_id', array('value' => $vm_company['VmCompany']['id'])); ?>
 
             <div class="col_9">
                 <?php echo $this->Form->label('VmExternalWorker.first_name', __('Ime radnika')); ?>

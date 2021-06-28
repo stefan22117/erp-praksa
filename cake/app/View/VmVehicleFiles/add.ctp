@@ -1,38 +1,87 @@
+<ul class="breadcrumbs">
+    <li><?php echo $this->Html->link(__('Početna'), array('controller' => 'pages', 'action' => 'display')); ?></li>
+    <li><?php echo $this->Html->link(__('Fajlovi vozila'), array('action' => 'index')); ?></li>
+    <li class="last"><a href="" onclick="return false"><?php echo __('Dodavanje'); ?></a></li>
+</ul>
 
-
-<?php
-
-
-echo $this->Form->create('VmVehicleFile', ['type'=>'file', 'novalidate'=>true]);
- ?>
-
-<?php
-if (!empty($vm_vehicles)) :
-?>
-
-    <div class="col_9">
-        <?php echo $this->Form->label('vm_vehicle_id', __('Vozilo')); ?>
-        <?php echo $this->Form->input('vm_vehicle_id', array('label' => false, 'options' => $vm_vehicles, 'class' => 'col_12', 'style' => 'margin: 0; width: 100%;', 'empty' => __('Izaberite vozilo'))); ?>
+<div class="name_add_search">
+    <div class="name_of_page">
+        <h3>
+            <i class="icon-file" style="color:darkblue;"></i>
+            <i class="icon-save" style="color:blue;"></i>
+            <?php echo __('Novi unos fajla vozila'); ?>
+        </h3>
     </div>
-    <div class="clear"></div>
 
-<?php elseif (isset($vm_vehicle['VmVehicle']['id'])) : ?>
-    <?php echo $this->Form->hidden('vm_vehicle_id', array('value' => $vm_vehicle['VmVehicle']['id'])); ?>
+</div>
 
 
+<div class="content_data">
+    <div class="formular">
+        <?php echo $this->Form->create('VmVehicleFile', array('novalidate' => true, 'type'=>'file')); ?>
 
-<?php endif; ?>
-<?php
+        <?php if (!empty($vm_vehicles)) : ?>
+            <div class="col_9">
+                <?php echo $this->Form->label('VmVehicleFile.vm_vehicle_id', __('Vozilo')); ?>
+                <?php echo $this->Form->input('VmVehicleFile.vm_vehicle_id', array('label' => false, 'options' => $vm_vehicles, 'class' => 'col_12', 'style' => 'margin: 0; width: 100%;', 'empty' => __('Izaberite vozilo'))); ?>
 
-echo $this->Form->input('VmVehicleFile.title');
+            </div>
 
- echo $this->Form->input('file', 
-array('type' => 'file', 'label' => false)
-);
-
-
+        <?php endif; ?>
 
 
-echo $this->Form->end('Upload');
 
-?>
+
+        <div class="col_9">
+            <?php echo $this->Form->label('VmVehicleFile.title', __('Naslov')); ?>
+            <?php echo $this->Form->input('VmVehicleFile.title', array('type' => 'text', 'label' => false, 'style' => 'margin: 0; width: 100%;', 'required' => false, 'placeholder' => __('Unesite naslov fajla vozila'))); ?>
+        </div>
+
+
+        <div class="col_9">
+            <?php echo $this->Form->label('file', __('Izaberite fajl vozila')); ?>
+            <?php echo $this->Form->input(
+                'file',
+                array('type' => 'file', 'label' => false)
+            ); ?>
+
+            <?php
+            if ($this->Form->isFieldError('VmVehicleFile.path')) {
+                echo $this->Form->error('VmVehicleFile.path');
+            }
+            ?>
+
+        </div>
+
+
+        <div class="content_text_input">
+            <div class="buttons_box">
+                <div class="button_box">
+                    <?php
+                    echo $this->Form->submit(
+                        __('Snimi'),
+                        array(
+                            'div' => false,
+                            'class' => "button blue",
+                            'style' => "margin:20px 0 20px 0;"
+                        )
+                    );
+                    ?>
+                </div>
+                <div class="button_box">
+                    <?php echo $this->Html->link(__('Nazad'), 'javascript:void(0)', array('id' => 'backId', 'class' => 'button', 'style' => 'margin:20px 0 20px 0;')); ?>
+                    <?php echo $this->Form->end(); ?>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    $('#backId').click(function(e) {
+        location.href = document.referrer
+    });
+
+    $('#VmVehicleFileVmVehicleId').select2();
+</script>

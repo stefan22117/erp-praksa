@@ -91,7 +91,7 @@ class VmExternalWorker extends AppModel
             ),
             'vm_company_id'=>array(
                 'naturalNumber'=>array(
-                    'rule'=>array('naturalNumber'),
+                    'rule'=>array('naturalNumber', '/0/'),
                     'message'=>'Niste izabrali firmu eksternog radnika'
                 )
             )

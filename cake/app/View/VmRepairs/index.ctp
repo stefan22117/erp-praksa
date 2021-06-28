@@ -68,36 +68,30 @@
 
             <thead>
                 <th><?php echo __('Cena popravke'); ?></th>
-                <th><?php echo __('Potrošeno vreme'); ?></th>
                 <th><?php echo __('Opis popravke'); ?></th>
-                <th><?php echo __('Vreme popravke'); ?></th>
                 <th><?php echo __('Radnik'); ?></th>
                 <th><?php echo __('Vozilo'); ?></th>
                 <th><?php echo __('Firma'); ?></th>
-                <th><?php echo __('Šteta'); ?></th>
                 <th></th>
-                <th colspan="2"></th>
             </thead>
             <tbody>
                 <?php foreach ($vm_repairs as $vm_repair) : ?>
                     <tr>
                         <td><?php echo $vm_repair['VmRepair']['amount']; ?></td>
+                        
                         <td>
-
-                            <?php
-                            $spent_time = $vm_repair['VmRepair']['spent_time'];
-                            $m = floor(($spent_time % 3600) / 60);
-                            $h = floor(($spent_time % 86400) / 3600);
-                            $d = floor($spent_time / 86400);
-
-                            $spent_time = '';
-                            $d ? $spent_time = ($d == 1 ?  __(' dan i ') : $d . __(' dana i ')) : null;
-                            $spent_time .= $h . ':' . $m;
-                            echo $spent_time;
+                            <?php echo strlen($vm_repair['VmRepair']['description']) < 15 ?
+                                $vm_repair['VmRepair']['description'] :
+                                substr($vm_repair['VmRepair']['description'], 0, 10) . '...'
                             ?>
                         </td>
-                        <td><?php echo $vm_repair['VmRepair']['description']; ?></td>
-                        <td><?php echo $vm_repair['VmCrossedKm']['report_datetime']; ?></td>
+
+
+
+
+
+
+
                         <td><?php echo $vm_repair['VmCrossedKm']['HrWorker']['first_name']; ?></td>
                         <td><?php echo
                             !empty($vm_repair['VmDamage']['VmVehicle']['brand_and_model']) && !empty($vm_repair['VmDamage']['VmVehicle']['id']) ?
@@ -121,22 +115,9 @@
                                     )
                                 ) : null; ?>
                         </td>
-                        <td><?php echo
-                            !empty($vm_repair['VmDamage']['description']) ?
-                                $this->Html->link(
-                                    strlen($vm_repair['VmDamage']['description']) < 15 ?
-                                        $vm_repair['VmDamage']['description'] :
-                                        substr($vm_repair['VmDamage']['description'], 0, 10) . '...',
-                                    array(
-                                        'controller' => 'vmCompanies',
-                                        'action' => 'view',
-                                        $vm_repair['VmCompany']['id']
-                                    )
-                                ) : null; ?>
+                       
                         </td>
-                        </td>
-                        <td></td>
-                        <td colspan="2">
+                        <td>
                             <ul class="button-bar">
                                 <li class="first">
                                     <?php echo $this->Html->link('<i class="icon-eye-open" style="color :blue"></i>', array('controller' => 'vmRepairs', 'action' => 'view', $vm_repair['VmRepair']['id']), array('title' => __('Detalji'), 'escape' => false)); ?>
@@ -145,7 +126,7 @@
                                     <?php echo $this->Html->link('<i class="icon-edit" style="color :orange"></i>', array('controller' => 'vmRepairs', 'action' => 'save', $vm_repair['VmRepair']['id']), array('title' => __('Izmena'), 'escape' => false)); ?>
                                 </li>
                                 <li class="last">
-                                    <?php echo $this->Form->postLink('<i class="icon-trash" style="color :red"></i>', array('controller' => 'vmRepairs', 'action' => 'delete', $vm_repair['VmRepair']['id']), array('title' => __('Brisanje'), 'escape' => false, 'confirm' => 'Da li ste sigurni da želite da izbrišete ovu popravku?')); ?>
+                                    <?php echo $this->Form->postLink('<i class="icon-trash" style="color :red"></i>', array('controller' => 'vmRepairs', 'action' => 'delete', $vm_repair['VmRepair']['id']), array('title' => __('Brisanje'), 'escape' => false, 'confirm' => 'Da li ste sigurni da želite da izbrišete popravku?')); ?>
                                 </li>
                             </ul>
 

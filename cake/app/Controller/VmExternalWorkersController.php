@@ -6,27 +6,25 @@ class VmExternalWorkersController extends AppController
 
     public function beforeFilter()
     {
-        $this->Auth->allow('index', 'add', 'view', 'edit', 'delete', 'save');
+        $this->Auth->allow('index', 'view', 'delete', 'save');
         if (
-			strtolower($this->request['action']) == 'view' ||
-			strtolower($this->request['action']) == 'save'
-		) {
-			$vm_external_worker_id = !empty($this->request['pass']) ? $this->request['pass'][0] : 0;
+            strtolower($this->request['action']) == 'view' ||
+            strtolower($this->request['action']) == 'save' ||
+            strtolower($this->request['action']) == 'delete'
+        ) {
+            $vm_external_worker_id = !empty($this->request['pass']) ? $this->request['pass'][0] : 0;
 
-			if ($vm_external_worker_id) {
-				$vm_external_worker = $this->VmExternalWorker->findById($vm_external_worker_id);
-				if (empty($vm_vehicle)) {
-					$this->Session->setFlash(__('Traženi eksterni radnik nije pronađen'), 'flash_error');
-					return $this->redirect(array('controller' => 'vmExternalWorkers', 'action' => 'index'));
-				}
-			}
-			else if(strtolower($this->request['action']) != 'save')
-			{
-				$this->Session->setFlash(__('Niste prosledili id eksternog radnika'), 'flash_error');
-				return $this->redirect(array('controller' => 'vmExternalWorkers', 'action' => 'index'));
-			}
-
-		}
+            if ($vm_external_worker_id) {
+                $vm_external_worker = $this->VmExternalWorker->findById($vm_external_worker_id);
+                if (empty($vm_external_worker)) {
+                    $this->Session->setFlash(__('Traženi eksterni radnik nije pronađen'), 'flash_error');
+                    return $this->redirect(array('controller' => 'vmExternalWorkers', 'action' => 'index'));
+                }
+            } else if (strtolower($this->request['action']) != 'save') {
+                $this->Session->setFlash(__('Niste prosledili id eksternog radnika'), 'flash_error');
+                return $this->redirect(array('controller' => 'vmExternalWorkers', 'action' => 'index'));
+            }
+        }
     }
 
     var $name = 'VmExternalWorkers';
@@ -43,7 +41,8 @@ class VmExternalWorkersController extends AppController
         'VmMaintenance',
         'VmDamage',
         'VmVehicleFile',
-        'HrWorker'
+        'HrWorker',
+        'VmExternalWorkerVehicle'
     );
 
 
@@ -55,7 +54,7 @@ class VmExternalWorkersController extends AppController
         $vm_vehicles = $this->VmVehicle->find(
             'list',
             array('fields' =>
-            array('VmVehicle.id', 'VmVehicle.brand_and_name'))
+            array('VmVehicle.id', 'VmVehicle.brand_and_model'))
         );
         $this->set('vm_vehicles', $vm_vehicles);
 
@@ -67,18 +66,18 @@ class VmExternalWorkersController extends AppController
         $this->set('vm_companies', $vm_companies);
 
         $conditions = array();
-		$joins = array();
+        $joins = array();
 
         if (isset($this->request->query['keywords']) && $this->request->query['keywords'] != '') {
-			$keywords = $this->request->query['keywords'];
+            $keywords = $this->request->query['keywords'];
 
-			$conditions['OR']['VmExternalWorker.first_name LIKE'] = '%' . $keywords . '%';
-			$conditions['OR']['VmExternalWorker.last_name LIKE'] = '%' . $keywords . '%';
-			$conditions['OR']['VmExternalWorker.phone_number LIKE'] = '%' . $keywords . '%';
-			$conditions['OR']['VmExternalWorker.email LIKE'] = '%' . $keywords . '%';
+            $conditions['OR']['VmExternalWorker.first_name LIKE'] = '%' . $keywords . '%';
+            $conditions['OR']['VmExternalWorker.last_name LIKE'] = '%' . $keywords . '%';
+            $conditions['OR']['VmExternalWorker.phone_number LIKE'] = '%' . $keywords . '%';
+            $conditions['OR']['VmExternalWorker.email LIKE'] = '%' . $keywords . '%';
 
-			$this->request->data['keywords'] = $keywords;
-		}
+            $this->request->data['keywords'] = $keywords;
+        }
 
         if (isset($this->request->query['vm_company_id'])  && $this->request->query['vm_company_id'] != '') {
             $vm_company_id = $this->request->query['vm_company_id'];
@@ -103,7 +102,6 @@ class VmExternalWorkersController extends AppController
 
         $this->Paginator->settings = $options;
         $this->set('vm_external_workers', $this->Paginator->paginate());
-
     }
     public function save($vm_external_worker_id = null)
     {
@@ -117,7 +115,10 @@ class VmExternalWorkersController extends AppController
             $this->VmExternalWorker->id = $vm_external_worker_id;
             $vm_external_worker = $this->VmExternalWorker->findById($vm_external_worker_id);
             $this->set('vm_external_worker', $vm_external_worker);
-            // $this->request->data = $vm_external_worker;
+
+            if ($this->request->is('get')) {
+                $this->request->data = $vm_external_worker;
+            }
         }
 
 
@@ -163,6 +164,23 @@ class VmExternalWorkersController extends AppController
 
         $vm_external_worker = $this->VmExternalWorker->findById($vm_external_worker_id);
         $this->set('vm_external_worker', $vm_external_worker);
+    }
 
+    public function delete($vm_external_worker_id = null)
+    {
+
+
+        if ($this->VmExternalWorker->delete($vm_external_worker_id)) {
+
+            $this->VmExternalWorkerVehicle->deleteAll(
+                array(
+                    'VmExternalWorkerVehicle.vm_external_worker_id' => $vm_external_worker_id
+                )
+            );
+            $this->Session->setFlash('Uspešno ste izbrisali eksternog radnika', 'flash_success');
+        } else {
+            $this->Session->setFlash('Došlo je do greške pri brisanju eksternog radnika', 'flash_error');
+        }
+        $this->redirect(array('action' => 'index'));
     }
 }

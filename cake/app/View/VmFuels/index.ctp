@@ -73,7 +73,8 @@
                         <tr>
                             <td><?php echo $vm_fuel['VmFuel']['liters']; ?></td>
                             <td><?php echo $vm_fuel['VmFuel']['amount']; ?></td>
-                            <td><?php echo $vm_fuel['VmCrossedKm']['HrWorker']['first_name']; ?></td>
+                            <td><?php echo !empty($vm_fuel['VmCrossedKm']['HrWorker']['first_name']) ?
+                            $vm_fuel['VmCrossedKm']['HrWorker']['first_name'] : null ; ?></td>
                             <td><?php echo $this->Html->link(
                                     $vm_fuel['VmVehicle']['brand_and_model'],
                                     array('controller' => 'vmVehicles', 'action' => 'view', $vm_fuel['VmVehicle']['id'])
@@ -106,7 +107,10 @@
                                         echo $this->Form->postLink(
                                             '<i class="icon-trash" style="color:red;"></i>',
                                             array('action' => 'delete', $vm_fuel['VmFuel']['id']),
-                                            array('escape' => false, 'title' => __('Detalji'))
+                                            array('escape' => false,
+                                            'title' => __('Brisanje'),
+                                            'confirm' =>  __('Da li ste sigurni da želite da izbrišete gorivo?')
+                                            )
                                         );
                                         ?>
 

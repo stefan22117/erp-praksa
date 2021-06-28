@@ -73,6 +73,8 @@
                 <?php echo $this->Form->input('VmDamage.vm_vehicle_id', array('label' => false, 'options' => $vm_vehicles, 'class' => 'col_12', 'style' => 'margin: 0; width: 100%;', 'empty' => __('Izaberite vozilo'))); ?>
             </div>
 
+            <?php else : ?>
+            <?php echo $this->Form->hidden('VmDamage.vm_vehicle_id', array('value' => $vm_damage['VmDamage']['vm_vehicle_id'])); ?>
         <?php endif; ?>
 
 
@@ -130,7 +132,10 @@
         location.href = document.referrer
     });
 
-    $('#VmDamageVmVehicleId').select2();
+    try {
+        $('#VmDamageVmVehicleId').select2();
+    } catch (e) {}
+
 
     $('input[type="date"]').datepicker({
         changeYear: true,

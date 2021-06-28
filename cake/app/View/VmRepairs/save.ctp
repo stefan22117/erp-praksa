@@ -209,10 +209,6 @@
     $('#VmCrossedKmHrWorkerId').select2({});
     $('#VmRepairVmCompanyId').select2({});
 
-    $('#backId').click(function(e) {
-        location.href = document.referrer
-    });
-
     $('#VmRepairSpentTimeDay').select2({
         minimumResultsForSearch: -1
     });
@@ -245,7 +241,6 @@
                 vm_vehicle_id: vm_vehicle_id
             },
             success: function(response) {
-                console.log(response);
                 $('#VmRepairVmDamageId').empty();
                 Object.keys(response).sort().forEach(function(key, i) {
                     $('#VmRepairVmDamageId').append($("<option></option>").attr("value", key).text(response[key]));

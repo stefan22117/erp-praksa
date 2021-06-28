@@ -26,12 +26,7 @@
         <?php echo $this->Form->create('VmVehicle', array('type' => 'get', 'action' => 'index')); ?>
         <?php echo $this->Form->input('keywords', array('label' => 'Pretraga', 'div' => false, 'style' => 'width:220px;', 'placeholder' => __('Unesite reči za pretragu'))); ?>
 
-
-
-
         <?php echo $this->Form->input('hr_worker_id', array('label' => 'Radnik', 'type' => 'select', 'div' => false, 'hiddenField' => false, 'options' => $hr_workers, 'empty' => 'Svi zaposleni')); ?>
-
-
 
         <?php echo $this->Form->input('in_use', array('label' => 'U upotrebi', 'type' => 'checkbox', 'div' => false, 'hiddenField' => false, 'value' => 'on')); ?>
 

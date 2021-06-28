@@ -110,10 +110,11 @@
                                 </li>
                                 <li class="last">
                                     <?php
-                                    echo $this->Html->link(
+                                    echo $this->Form->postLink(
                                         '<i class="icon-trash" style="color:red;"></i>',
                                         array('action' => 'delete', $vm_damage['VmDamage']['id']),
-                                        array('escape' => false, 'title' => __('Detalji'))
+                                        array('escape' => false, 'title' => __('Brisanje'),
+                                        'confirm' => 'Da li ste sigurni da želite da izbrišete štetu?')
                                     );
                                     ?>
 
