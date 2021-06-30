@@ -5,8 +5,7 @@ class VmVehicleFilesController extends AppController
     public function beforeFilter()
     {
         parent::beforeFilter();
-        $this->Auth->allow('index', 'add', 'view', 'delete', 'download');
-
+        
         if (
             strtolower($this->request['action']) == 'view' ||
             strtolower($this->request['action']) == 'delete'

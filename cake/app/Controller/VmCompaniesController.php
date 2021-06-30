@@ -17,12 +17,9 @@ class VmCompaniesController  extends AppController
         'VmExternalWorker',
         'VmRegistration'
     );
-
     public function beforeFilter()
     {
-        $this->Auth->allow('index', 'view', 'save', 'delete');
-        $items = ['1'];
-        $this->set('items', $items);
+        parent::beforeFilter();
         if (
             strtolower($this->request['action']) == 'view' ||
             strtolower($this->request['action']) == 'save' ||
@@ -42,6 +39,7 @@ class VmCompaniesController  extends AppController
             }
         }
     }
+    
 
 
     public function index()
@@ -193,24 +191,6 @@ class VmCompaniesController  extends AppController
         //getting errors end
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         $vm_company = $this->VmCompany->find('first', array(
             'conditions' => array('VmCompany.id = ' => $vm_company_id),
             'recursive' => 2
@@ -271,22 +251,6 @@ class VmCompaniesController  extends AppController
         $this->set('vm_external_workers', $vm_external_workers);
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     public function delete($vm_company_id = null)
     {
 
@@ -337,4 +301,6 @@ class VmCompaniesController  extends AppController
         }
         $this->redirect(array('action' => 'index'));
     }
+
+    
 }

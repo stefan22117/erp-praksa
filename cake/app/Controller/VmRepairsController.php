@@ -21,8 +21,7 @@ class VmRepairsController extends AppController
     public function beforeFilter()
     {
         parent::beforeFilter();
-        $this->Auth->allow('index', 'view', 'save', 'delete');
-
+      
         if (
             strtolower($this->request['action']) == 'view' ||
             strtolower($this->request['action']) == 'save' ||

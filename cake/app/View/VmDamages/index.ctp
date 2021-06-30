@@ -27,7 +27,7 @@
 <div class="content_data meni">
     <fieldset style="margin-top:0;">
         <legend>Filteri</legend>
-        <?php echo $this->Form->create('VmDamage', array('novalidate'=>true, 'type' => 'get', 'action' => 'index')); ?>
+        <?php echo $this->Form->create('VmDamage', array('novalidate' => true, 'type' => 'get', 'action' => 'index')); ?>
 
         <?php echo $this->Form->input('keywords', array('label' => 'Pretraga', 'div' => false, 'style' => 'width:220px;', 'placeholder' => __('Unesite reči za pretragu'))); ?>
 
@@ -84,9 +84,11 @@
                             </td>
 
                         <?php endif; ?>
-                        <td><?php echo $this->Html->link($vm_damage['VmVehicle']['brand_and_model'],
-                        array('controller'=>'vmVehicles', 'action'=>'view', $vm_damage['VmVehicle']['id']));
-                        ?>
+                        <td><?php echo $this->Html->link(
+                                $vm_damage['VmVehicle']['brand_and_model'],
+                                array('controller' => 'vmVehicles', 'action' => 'view', $vm_damage['VmVehicle']['id'])
+                            );
+                            ?>
                         </td>
                         <td>
                             <ul class="button-bar">
@@ -113,8 +115,11 @@
                                     echo $this->Form->postLink(
                                         '<i class="icon-trash" style="color:red;"></i>',
                                         array('action' => 'delete', $vm_damage['VmDamage']['id']),
-                                        array('escape' => false, 'title' => __('Brisanje'),
-                                        'confirm' => 'Da li ste sigurni da želite da izbrišete štetu?')
+                                        array(
+                                            'escape' => false, 'title' => __('Brisanje'),
+                                            'confirm' => 'Da li ste sigurni da želite da izbrišete štetu?'
+                                        )
+
                                     );
                                     ?>
 

@@ -5,8 +5,7 @@ class VmImagesController extends AppController
     public function beforeFilter()
     {
         parent::beforeFilter();
-        $this->Auth->allow('index', 'add', 'view', 'delete', 'download', 'galery');
-
+      
         if (
             strtolower($this->request['action']) == 'view' ||
             strtolower($this->request['action']) == 'delete'

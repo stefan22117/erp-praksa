@@ -4,12 +4,6 @@ App::uses('AppController', 'Controller');
 class VmChangeLogsController  extends AppController
 {
 
-   
-
-    public function beforeFilter()
-    {
-        $this->Auth->allow('index', 'delete');
-    }
 
     var $name = 'VmChangeLogs';
 	public $components = array('Paginator');

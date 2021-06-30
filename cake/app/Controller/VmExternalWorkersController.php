@@ -6,7 +6,7 @@ class VmExternalWorkersController extends AppController
 
     public function beforeFilter()
     {
-        $this->Auth->allow('index', 'view', 'delete', 'save');
+        parent::beforeFilter();
         if (
             strtolower($this->request['action']) == 'view' ||
             strtolower($this->request['action']) == 'save' ||
