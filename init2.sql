@@ -663,7 +663,9 @@ INSERT INTO `aros` (`id`, `parent_id`, `model`, `foreign_key`, `alias`, `lft`, `
 (534,	349,	'User',	281,	'',	644,	645),
 (535,	238,	'User',	282,	'',	516,	517),
 (536,	349,	'User',	283,	'',	646,	647),
-(537,	26,	'User',	284,	'',	232,	233);
+(537,	26,	'User',	284,	'',	232,	233),
+(538,	NULL,	'Group',	28,	'',	725,	728),
+(539,	538,	'User',	72,	'',	726,	727);
 
 DROP TABLE IF EXISTS `aros_acos`;
 CREATE TABLE `aros_acos` (
@@ -1269,7 +1271,61 @@ INSERT INTO `aros_acos` (`id`, `aro_id`, `aco_id`, `_create`, `_read`, `_update`
 (28297,	238,	3323,	'1',	'1',	'1',	'1'),
 (28298,	238,	3324,	'1',	'1',	'1',	'1'),
 (28299,	238,	3325,	'1',	'1',	'1',	'1'),
-(28300,	238,	3570,	'1',	'1',	'1',	'1');
+(28300,	238,	3570,	'1',	'1',	'1',	'1'),
+(28301,	538,	5618,	'1',	'1',	'1',	'1'),
+(28302,	538,	5619,	'-1',	'-1',	'-1',	'-1'),
+(28303,	1,	5618,	'1',	'1',	'1',	'1'),
+(28304,	1,	5619,	'1',	'1',	'1',	'1'),
+(28305,	538,	5621,	'1',	'1',	'1',	'1'),
+(28306,	538,	5622,	'-1',	'-1',	'-1',	'-1'),
+(28307,	538,	5623,	'1',	'1',	'1',	'1'),
+(28308,	538,	5624,	'-1',	'-1',	'-1',	'-1'),
+(28309,	538,	5677,	'1',	'1',	'1',	'1'),
+(28310,	538,	5678,	'-1',	'-1',	'-1',	'-1'),
+(28311,	538,	5679,	'1',	'1',	'1',	'1'),
+(28312,	538,	5680,	'-1',	'-1',	'-1',	'-1'),
+(28313,	538,	5626,	'1',	'1',	'1',	'1'),
+(28314,	538,	5627,	'1',	'1',	'1',	'1'),
+(28315,	538,	5628,	'1',	'1',	'1',	'1'),
+(28316,	538,	5629,	'1',	'1',	'1',	'1'),
+(28317,	538,	5630,	'1',	'1',	'1',	'1'),
+(28318,	538,	5632,	'1',	'1',	'1',	'1'),
+(28319,	538,	5633,	'-1',	'-1',	'-1',	'-1'),
+(28320,	538,	5634,	'1',	'1',	'1',	'1'),
+(28321,	538,	5635,	'-1',	'-1',	'-1',	'-1'),
+(28322,	538,	5637,	'1',	'1',	'1',	'1'),
+(28323,	538,	5638,	'1',	'1',	'1',	'1'),
+(28324,	538,	5639,	'1',	'1',	'1',	'1'),
+(28325,	538,	5640,	'1',	'1',	'1',	'1'),
+(28326,	538,	5642,	'1',	'1',	'1',	'1'),
+(28327,	538,	5643,	'1',	'1',	'1',	'1'),
+(28328,	538,	5644,	'1',	'1',	'1',	'1'),
+(28329,	538,	5645,	'1',	'1',	'1',	'1'),
+(28330,	538,	5646,	'1',	'1',	'1',	'1'),
+(28331,	538,	5647,	'1',	'1',	'1',	'1'),
+(28332,	538,	5649,	'1',	'1',	'1',	'1'),
+(28333,	538,	5650,	'1',	'1',	'1',	'1'),
+(28334,	538,	5651,	'1',	'1',	'1',	'1'),
+(28335,	538,	5652,	'1',	'1',	'1',	'1'),
+(28336,	538,	5654,	'1',	'1',	'1',	'1'),
+(28337,	538,	5655,	'1',	'1',	'1',	'1'),
+(28338,	538,	5656,	'1',	'1',	'1',	'1'),
+(28339,	538,	5657,	'1',	'1',	'1',	'1'),
+(28340,	538,	5658,	'1',	'1',	'1',	'1'),
+(28341,	538,	5659,	'1',	'1',	'1',	'1'),
+(28342,	538,	5661,	'1',	'1',	'1',	'1'),
+(28343,	538,	5662,	'1',	'1',	'1',	'1'),
+(28344,	538,	5663,	'1',	'1',	'1',	'1'),
+(28345,	538,	5664,	'1',	'1',	'1',	'1'),
+(28346,	538,	5666,	'1',	'1',	'1',	'1'),
+(28347,	538,	5667,	'1',	'1',	'1',	'1'),
+(28348,	538,	5668,	'1',	'1',	'1',	'1'),
+(28349,	538,	5669,	'1',	'1',	'1',	'1'),
+(28350,	538,	5671,	'1',	'1',	'1',	'1'),
+(28351,	538,	5672,	'1',	'1',	'1',	'1'),
+(28352,	538,	5673,	'1',	'1',	'1',	'1'),
+(28353,	538,	5674,	'1',	'1',	'1',	'1'),
+(28354,	538,	5675,	'1',	'1',	'1',	'1');
 
 DROP TABLE IF EXISTS `attachments`;
 CREATE TABLE `attachments` (
@@ -1329,7 +1385,7 @@ CREATE TABLE `cake_sessions` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 INSERT INTO `cake_sessions` (`id`, `user_id`, `data`, `expires`) VALUES
-('ev3qnu09jvcli8485p9kbrior1',	71,	'Config|a:3:{s:9:\"userAgent\";s:32:\"5297e2c245fb79796638f0c2bd706bab\";s:4:\"time\";i:1625096339;s:9:\"countdown\";i:10;}Message|a:0:{}Auth|a:1:{s:4:\"User\";a:21:{s:2:\"id\";s:2:\"71\";s:6:\"pis_id\";s:2:\"32\";s:9:\"worker_id\";s:1:\"5\";s:12:\"hr_worker_id\";s:1:\"5\";s:8:\"group_id\";s:1:\"1\";s:10:\"first_name\";s:5:\"Admin\";s:9:\"last_name\";s:3:\"ERP\";s:8:\"username\";s:5:\"admin\";s:5:\"email\";s:16:\"admin@mikroe.com\";s:11:\"avatar_link\";s:0:\"\";s:14:\"signature_link\";s:0:\"\";s:6:\"salary\";N;s:11:\"currency_id\";N;s:13:\"department_id\";N;s:6:\"active\";b:1;s:8:\"language\";s:3:\"srb\";s:7:\"created\";s:19:\"2013-11-04 17:11:30\";s:8:\"modified\";s:19:\"2020-12-15 14:11:27\";s:9:\"full_name\";s:17:\"Admin ERP (admin)\";s:4:\"name\";s:9:\"Admin ERP\";s:5:\"Group\";a:4:{s:2:\"id\";s:1:\"1\";s:4:\"name\";s:13:\"Administrator\";s:7:\"created\";s:19:\"2013-09-03 13:22:40\";s:8:\"modified\";s:19:\"2013-09-06 10:38:31\";}}}VehicleLogCount|a:9:{s:9:\"VmVehicle\";i:1;s:14:\"VmRegistration\";i:1;s:8:\"VmRepair\";i:0;s:6:\"VmFuel\";i:0;s:8:\"VmDamage\";i:0;s:13:\"VmMaintenance\";i:0;s:13:\"VmVehicleFile\";i:1;s:7:\"VmImage\";i:0;s:18:\"VmRegistrationFile\";i:0;}',	1625096340),
+('90hcnqelua7pe4sajb0ch52504',	72,	'Config|a:3:{s:9:\"userAgent\";s:32:\"5297e2c245fb79796638f0c2bd706bab\";s:4:\"time\";i:1625098985;s:9:\"countdown\";i:10;}Message|a:0:{}Auth|a:1:{s:4:\"User\";a:21:{s:2:\"id\";s:2:\"72\";s:6:\"pis_id\";N;s:9:\"worker_id\";N;s:12:\"hr_worker_id\";N;s:8:\"group_id\";s:2:\"28\";s:10:\"first_name\";s:5:\"Petar\";s:9:\"last_name\";s:9:\"Petrović\";s:8:\"username\";s:8:\"korisnik\";s:5:\"email\";s:21:\"korisnik123@gmail.com\";s:11:\"avatar_link\";N;s:14:\"signature_link\";N;s:6:\"salary\";N;s:11:\"currency_id\";N;s:13:\"department_id\";N;s:6:\"active\";b:1;s:8:\"language\";s:3:\"srb\";s:7:\"created\";s:19:\"2021-06-30 15:47:53\";s:8:\"modified\";s:19:\"2021-06-30 15:47:53\";s:9:\"full_name\";s:26:\"Petar Petrović (korisnik)\";s:4:\"name\";s:15:\"Petar Petrović\";s:5:\"Group\";a:4:{s:2:\"id\";s:2:\"28\";s:4:\"name\";s:8:\"Korisnik\";s:7:\"created\";s:19:\"2021-06-30 15:46:28\";s:8:\"modified\";s:19:\"2021-06-30 15:46:28\";}}}VehicleLogCount|a:9:{s:9:\"VmVehicle\";i:1;s:14:\"VmRegistration\";i:1;s:8:\"VmRepair\";i:0;s:6:\"VmFuel\";i:0;s:8:\"VmDamage\";i:0;s:13:\"VmMaintenance\";i:0;s:13:\"VmVehicleFile\";i:1;s:7:\"VmImage\";i:0;s:18:\"VmRegistrationFile\";i:0;}',	1625098986),
 ('figba7qclpk43ovkkgqnu28sq3',	NULL,	'Config|a:3:{s:9:\"userAgent\";s:32:\"801e3298decdaa74c9c5943073e7618d\";s:4:\"time\";i:1608052770;s:9:\"countdown\";i:10;}',	1608052770),
 ('i8ik2at4elbtipjje3gbrpe967',	NULL,	'Config|a:3:{s:9:\"userAgent\";s:32:\"801e3298decdaa74c9c5943073e7618d\";s:4:\"time\";i:1608074019;s:9:\"countdown\";i:10;}Auth|a:0:{}Message|a:0:{}',	1608074020);
 
@@ -1737,7 +1793,27 @@ INSERT INTO `erp_logs` (`id`, `user_id`, `controller`, `action`, `input_data`, `
 (13,	71,	'MenuItems',	'save',	'a:1:{s:8:\"MenuItem\";a:5:{s:9:\"parent_id\";s:2:\"10\";s:4:\"name\";s:6:\"Goriva\";s:21:\"erp_kickstart_icon_id\";s:2:\"35\";s:6:\"aco_id\";s:4:\"5637\";s:6:\"params\";s:0:\"\";}}',	'form',	'The MenuItem has been saved',	'172.20.0.1',	'2021-06-30 15:36:59'),
 (14,	71,	'MenuItems',	'save',	'a:1:{s:8:\"MenuItem\";a:5:{s:9:\"parent_id\";s:2:\"10\";s:4:\"name\";s:6:\"Štete\";s:21:\"erp_kickstart_icon_id\";s:2:\"51\";s:6:\"aco_id\";s:4:\"5626\";s:6:\"params\";s:0:\"\";}}',	'form',	'The MenuItem has been saved',	'172.20.0.1',	'2021-06-30 15:37:48'),
 (15,	71,	'MenuItems',	'save',	'a:1:{s:8:\"MenuItem\";a:5:{s:9:\"parent_id\";s:2:\"10\";s:4:\"name\";s:8:\"Popravke\";s:21:\"erp_kickstart_icon_id\";s:2:\"29\";s:6:\"aco_id\";s:4:\"5666\";s:6:\"params\";s:0:\"\";}}',	'form',	'The MenuItem has been saved',	'172.20.0.1',	'2021-06-30 15:38:23'),
-(16,	71,	'MenuItems',	'save',	'a:1:{s:8:\"MenuItem\";a:5:{s:9:\"parent_id\";s:2:\"10\";s:4:\"name\";s:11:\"Održavanja\";s:21:\"erp_kickstart_icon_id\";s:3:\"136\";s:6:\"aco_id\";s:4:\"5649\";s:6:\"params\";s:0:\"\";}}',	'form',	'The MenuItem has been saved',	'172.20.0.1',	'2021-06-30 15:38:57');
+(16,	71,	'MenuItems',	'save',	'a:1:{s:8:\"MenuItem\";a:5:{s:9:\"parent_id\";s:2:\"10\";s:4:\"name\";s:11:\"Održavanja\";s:21:\"erp_kickstart_icon_id\";s:3:\"136\";s:6:\"aco_id\";s:4:\"5649\";s:6:\"params\";s:0:\"\";}}',	'form',	'The MenuItem has been saved',	'172.20.0.1',	'2021-06-30 15:38:57'),
+(17,	71,	'Groups',	'add',	'a:1:{s:5:\"Group\";a:1:{s:4:\"name\";s:9:\"Korisnici\";}}',	'form',	'The group has been added',	'172.20.0.1',	'2021-06-30 15:46:28'),
+(18,	71,	'Users',	'add',	'first_name: Petar; last_name: Petrović; username: korisnik; email: korisnik123@gmail.com; password: ce932ac98a862e6d926ebbe4b1be236dc5ea02bf; group_id: 28',	'form',	'The user has been added',	'172.20.0.1',	'2021-06-30 15:47:53'),
+(19,	71,	'groups',	'grouppermissions',	'allow:controllers/VmChangeLogs/index; deny:controllers/VmChangeLogs/delete; group_id:28',	'parameters',	'The group permissions has been changed',	'172.20.0.1',	'2021-06-30 15:50:36'),
+(20,	71,	'MenuItems',	'save',	'a:1:{s:8:\"MenuItem\";a:5:{s:9:\"parent_id\";s:2:\"10\";s:4:\"name\";s:16:\"Beleške promena\";s:21:\"erp_kickstart_icon_id\";s:2:\"11\";s:6:\"aco_id\";s:4:\"5618\";s:6:\"params\";s:0:\"\";}}',	'form',	'The MenuItem has been saved',	'172.20.0.1',	'2021-06-30 15:51:48'),
+(21,	71,	'groups',	'grouppermissions',	'allow:controllers/VmChangeLogs/index; allow:controllers/VmChangeLogs/delete; group_id:1',	'parameters',	'The group permissions has been changed',	'172.20.0.1',	'2021-06-30 15:55:12'),
+(22,	71,	'groups',	'grouppermissions',	'allow:controllers/VmCompanies/index; deny:controllers/VmCompanies/save; allow:controllers/VmCompanies/view; deny:controllers/VmCompanies/delete; group_id:28',	'parameters',	'The group permissions has been changed',	'172.20.0.1',	'2021-06-30 15:56:55'),
+(23,	71,	'groups',	'grouppermissions',	'allow:controllers/VmVehicles/index; deny:controllers/VmVehicles/save; allow:controllers/VmVehicles/view; deny:controllers/VmVehicles/delete; group_id:28',	'parameters',	'The group permissions has been changed',	'172.20.0.1',	'2021-06-30 15:57:26'),
+(24,	71,	'groups',	'grouppermissions',	'allow:controllers/VmDamages/index; allow:controllers/VmDamages/view; allow:controllers/VmDamages/save; allow:controllers/VmDamages/delete; allow:controllers/VmDamages/repair; group_id:28',	'parameters',	'The group permissions has been changed',	'172.20.0.1',	'2021-06-30 15:57:50'),
+(25,	71,	'groups',	'grouppermissions',	'allow:controllers/VmExternalWorkers/index; deny:controllers/VmExternalWorkers/save; allow:controllers/VmExternalWorkers/view; deny:controllers/VmExternalWorkers/delete; group_id:28',	'parameters',	'The group permissions has been changed',	'172.20.0.1',	'2021-06-30 15:58:04'),
+(26,	71,	'groups',	'grouppermissions',	'allow:controllers/VmFuels/index; allow:controllers/VmFuels/save; allow:controllers/VmFuels/view; allow:controllers/VmFuels/delete; group_id:28',	'parameters',	'The group permissions has been changed',	'172.20.0.1',	'2021-06-30 15:58:21'),
+(27,	71,	'groups',	'grouppermissions',	'allow:controllers/VmImages/index; allow:controllers/VmImages/add; allow:controllers/VmImages/view; allow:controllers/VmImages/delete; allow:controllers/VmImages/download; allow:controllers/VmImages/galery; group_id:28',	'parameters',	'The group permissions has been changed',	'172.20.0.1',	'2021-06-30 15:58:53'),
+(28,	71,	'groups',	'grouppermissions',	'allow:controllers/VmMaintenances/index; allow:controllers/VmMaintenances/view; allow:controllers/VmMaintenances/save; allow:controllers/VmMaintenances/delete; group_id:28',	'parameters',	'The group permissions has been changed',	'172.20.0.1',	'2021-06-30 15:59:02'),
+(29,	71,	'groups',	'grouppermissions',	'allow:controllers/VmRegistrationFiles/index; allow:controllers/VmRegistrationFiles/view; allow:controllers/VmRegistrationFiles/add; allow:controllers/VmRegistrationFiles/delete; allow:controllers/VmRegistrationFiles/download; allow:controllers/VmRegistrationFiles/reloadRegistrations; group_id:28',	'parameters',	'The group permissions has been changed',	'172.20.0.1',	'2021-06-30 15:59:15'),
+(30,	71,	'groups',	'grouppermissions',	'allow:controllers/VmRegistrations/index; allow:controllers/VmRegistrations/save; allow:controllers/VmRegistrations/view; allow:controllers/VmRegistrations/delete; group_id:28',	'parameters',	'The group permissions has been changed',	'172.20.0.1',	'2021-06-30 15:59:25'),
+(31,	71,	'groups',	'grouppermissions',	'allow:controllers/VmRepairs/index; allow:controllers/VmRepairs/view; allow:controllers/VmRepairs/save; allow:controllers/VmRepairs/delete; group_id:28',	'parameters',	'The group permissions has been changed',	'172.20.0.1',	'2021-06-30 15:59:32'),
+(32,	71,	'groups',	'grouppermissions',	'allow:controllers/VmVehicleFiles/index; allow:controllers/VmVehicleFiles/add; allow:controllers/VmVehicleFiles/view; allow:controllers/VmVehicleFiles/delete; allow:controllers/VmVehicleFiles/download; group_id:28',	'parameters',	'The group permissions has been changed',	'172.20.0.1',	'2021-06-30 15:59:41'),
+(33,	71,	'groups',	'grouppermissions',	'allow:controllers/VmVehicles/index; deny:controllers/VmVehicles/save; allow:controllers/VmVehicles/view; deny:controllers/VmVehicles/delete; group_id:28',	'parameters',	'The group permissions has been changed',	'172.20.0.1',	'2021-06-30 15:59:50'),
+(34,	71,	'Groups',	'edit',	'a:1:{s:5:\"Group\";a:2:{s:4:\"name\";s:8:\"Korisnik\";s:2:\"id\";s:2:\"28\";}}',	'form',	'User edited group',	'172.20.0.1',	'2021-06-30 16:00:08'),
+(35,	71,	'Users',	'logout',	'',	'parameters',	'User logged out',	'172.20.0.1',	'2021-06-30 16:00:22'),
+(36,	72,	'users',	'login',	'username: korisnik; password: ce932ac98a862e6d926ebbe4b1be236dc5ea02bf; ip_address: 172.20.0.1',	'form',	'The user has been logged in',	'172.20.0.1',	'2021-06-30 16:00:39');
 
 DROP TABLE IF EXISTS `erp_units`;
 CREATE TABLE `erp_units` (
@@ -6406,7 +6482,8 @@ CREATE TABLE `groups` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 INSERT INTO `groups` (`id`, `name`, `created`, `modified`) VALUES
-(1,	'Administrator',	'2013-09-03 13:22:40',	'2013-09-06 10:38:31');
+(1,	'Administrator',	'2013-09-03 13:22:40',	'2013-09-06 10:38:31'),
+(28,	'Korisnik',	'2021-06-30 15:46:28',	'2021-06-30 15:46:28');
 
 DROP TABLE IF EXISTS `history_changes`;
 CREATE TABLE `history_changes` (
@@ -6515,7 +6592,8 @@ INSERT INTO `menu_items` (`id`, `parent_id`, `aco_id`, `erp_kickstart_icon_id`, 
 (15,	10,	5637,	35,	'Goriva',	'',	0,	'2021-06-30 15:36:59',	'2021-06-30 15:36:59'),
 (16,	10,	5626,	51,	'Štete',	'',	0,	'2021-06-30 15:37:48',	'2021-06-30 15:37:48'),
 (17,	10,	5666,	29,	'Popravke',	'',	0,	'2021-06-30 15:38:23',	'2021-06-30 15:38:23'),
-(18,	10,	5649,	136,	'Održavanja',	'',	0,	'2021-06-30 15:38:57',	'2021-06-30 15:38:57');
+(18,	10,	5649,	136,	'Održavanja',	'',	0,	'2021-06-30 15:38:57',	'2021-06-30 15:38:57'),
+(19,	10,	5618,	11,	'Beleške promena',	'',	0,	'2021-06-30 15:51:48',	'2021-06-30 15:51:48');
 
 DROP TABLE IF EXISTS `notifications`;
 CREATE TABLE `notifications` (
@@ -6600,7 +6678,8 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `pis_id`, `worker_id`, `hr_worker_id`, `group_id`, `first_name`, `last_name`, `username`, `password`, `email`, `avatar_link`, `signature_link`, `salary`, `currency_id`, `department_id`, `active`, `language`, `created`, `modified`) VALUES
 (1,	29,	NULL,	NULL,	1,	'mikroERP',	'Sistem',	'system',	'0125601999bc39d91ac87e92d6528ed0b9cdaa1b',	'system@mikroe.com',	'',	'',	NULL,	NULL,	NULL,	1,	'srb',	'2013-09-03 13:23:09',	'2020-05-26 09:39:02'),
-(71,	32,	5,	5,	1,	'Admin',	'ERP',	'admin',	'dfdc7532426003206e0444fcc6a92da01a8fe76d',	'admin@mikroe.com',	'',	'',	NULL,	NULL,	NULL,	1,	'srb',	'2013-11-04 17:11:30',	'2020-12-15 14:11:27');
+(71,	32,	5,	5,	1,	'Admin',	'ERP',	'admin',	'dfdc7532426003206e0444fcc6a92da01a8fe76d',	'admin@mikroe.com',	'',	'',	NULL,	NULL,	NULL,	1,	'srb',	'2013-11-04 17:11:30',	'2020-12-15 14:11:27'),
+(72,	NULL,	NULL,	NULL,	28,	'Petar',	'Petrović',	'korisnik',	'ce932ac98a862e6d926ebbe4b1be236dc5ea02bf',	'korisnik123@gmail.com',	NULL,	NULL,	NULL,	NULL,	NULL,	1,	'srb',	'2021-06-30 15:47:53',	'2021-06-30 15:47:53');
 
 DROP TABLE IF EXISTS `vm_change_logs`;
 CREATE TABLE `vm_change_logs` (
@@ -6613,6 +6692,10 @@ CREATE TABLE `vm_change_logs` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+INSERT INTO `vm_change_logs` (`id`, `description`, `user_id`, `vm_vehicle_id`, `created`, `modified`) VALUES
+(147,	'Vehicle was added',	71,	34,	'2021-06-28 09:25:10',	'2021-06-28 09:25:10'),
+(149,	'VehicleFile was added',	71,	34,	'2021-06-28 09:29:44',	'2021-06-28 09:29:44'),
+(150,	'Vehicle was updated',	71,	34,	'2021-06-28 09:30:02',	'2021-06-28 09:30:02');
 
 DROP TABLE IF EXISTS `vm_companies`;
 CREATE TABLE `vm_companies` (
@@ -6627,6 +6710,9 @@ CREATE TABLE `vm_companies` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+INSERT INTO `vm_companies` (`id`, `name`, `address`, `city`, `email`, `zip_code`, `created`, `modified`) VALUES
+(9,	'Auto Servis Petrovic',	'Milutina Milankovica 225',	'Beograd',	'petrovicdoo@gmail.com',	'11000',	'2021-06-28 09:18:28',	'2021-06-28 09:18:28'),
+(10,	'Tehnicki pregled Irvas',	'Save Milosevica 322',	'Kruševac',	'irvasdoo037@gmail.com',	'37000',	'2021-06-28 09:27:14',	'2021-06-28 09:27:14');
 
 DROP TABLE IF EXISTS `vm_crossed_kms`;
 CREATE TABLE `vm_crossed_kms` (
@@ -6669,6 +6755,9 @@ CREATE TABLE `vm_external_workers` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+INSERT INTO `vm_external_workers` (`id`, `first_name`, `last_name`, `date_of_birth`, `phone_number`, `email`, `vm_company_id`, `created`, `modified`) VALUES
+(11,	'Milos',	'Petrovic',	'2021-06-28',	'0604567234',	'petrovicdoo@gmail.com',	9,	'2021-06-28',	'2021-06-28'),
+(12,	'Aleksa',	'Rakic',	'2021-06-28',	'0669078751',	'aleksa112@gmail.com',	10,	'2021-06-28',	'2021-06-28');
 
 DROP TABLE IF EXISTS `vm_external_worker_vehicles`;
 CREATE TABLE `vm_external_worker_vehicles` (
@@ -6716,6 +6805,8 @@ CREATE TABLE `vm_internal_worker_vehicles` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+INSERT INTO `vm_internal_worker_vehicles` (`id`, `vm_vehicle_id`, `hr_worker_id`, `created`, `modified`) VALUES
+(65,	34,	1,	'2021-06-28 09:30:02',	'2021-06-28 09:30:02');
 
 DROP TABLE IF EXISTS `vm_maintenances`;
 CREATE TABLE `vm_maintenances` (
@@ -6747,6 +6838,8 @@ CREATE TABLE `vm_registrations` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+INSERT INTO `vm_registrations` (`id`, `registration_date`, `spent_time`, `hr_worker_id`, `expiration_date`, `amount`, `vm_vehicle_id`, `vm_company_id`, `created`, `modified`) VALUES
+(28,	'2021-06-28',	7200,	1,	'2022-06-28',	40000,	34,	10,	'2021-06-28 09:28:57',	'2021-06-28 09:28:57');
 
 DROP TABLE IF EXISTS `vm_registration_files`;
 CREATE TABLE `vm_registration_files` (
@@ -6797,6 +6890,8 @@ CREATE TABLE `vm_vehicles` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+INSERT INTO `vm_vehicles` (`id`, `brand_and_model`, `reg_number`, `in_use`, `active_from`, `active_to`, `horse_power`, `engine_capacity_cm3`, `year_of_production`, `color`, `number_of_seats`, `chassis_number`, `engine_number`, `date_of_purchase`, `price`, `created`, `modified`) VALUES
+(34,	'Mercedes S',	'KS-3333-WD',	0,	'2021-06-28',	NULL,	170,	2200,	2019,	'crna',	5,	'12345678901234567',	'1234567890',	'2021-06-28',	1000000,	'2021-06-28 09:25:10',	'2021-06-28 09:30:02');
 
 DROP TABLE IF EXISTS `vm_vehicle_files`;
 CREATE TABLE `vm_vehicle_files` (
@@ -6809,6 +6904,8 @@ CREATE TABLE `vm_vehicle_files` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+INSERT INTO `vm_vehicle_files` (`id`, `title`, `path`, `vm_vehicle_id`, `created`, `modified`) VALUES
+(20,	'saobracajna',	'vehicle_files/34-1624865384.pdf',	34,	'2021-06-28 09:29:44',	'2021-06-28 09:29:44');
 
 DROP TABLE IF EXISTS `vm_vehicle_internal_workers`;
 CREATE TABLE `vm_vehicle_internal_workers` (
@@ -6821,4 +6918,4 @@ CREATE TABLE `vm_vehicle_internal_workers` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
--- 2021-06-30 13:40:18
+-- 2021-07-01 06:25:42
